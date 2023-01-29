@@ -2,16 +2,56 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "sqlite"
-    url      = env("DATABASE_URL")
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
 }
 
 model Example {
-    id        String   @id @default(cuid())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Ticket {
+  ticketId   Int        @id @default(autoincrement())
+  holderName String
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  Purchase   Purchase[]
+}
+
+model Item {
+  id          String     @id @default(cuid())
+  displayName String
+  category    Category   @relation(fields: [categoryId], references: [id])
+  Purchase    Purchase[]
+  categoryId  String
+  price       Int
+  barcode     Int? //deprecated
+  icon        String?
+
+  parentItem    Item?   @relation("ParentChild", fields: [parentId], references: [id])
+  parentId      String?
+  childlrenItem Item[]  @relation("ParentChild")
+}
+
+model Category {
+  id          String  @id
+  displayName String
+  icon        String?
+  Item        Item[]
+}
+
+model Purchase {
+  purchaseId String   @id @default(cuid())
+  buyer      Ticket   @relation(fields: [buyerId], references: [ticketId])
+  buyerId    Int
+  item       Item     @relation(fields: [itemId], references: [id])
+  itemId     String
+  quantity   Int      @default(1)
+  timestamp  DateTime @default(now())
 }
