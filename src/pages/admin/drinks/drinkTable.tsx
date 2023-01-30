@@ -34,9 +34,9 @@ const DrinkTable: NextPage<Props> = ({ mode, categoryId, parentId }) => {
             <Link
               href={`/admin/drinks/details?drink=${item.id}`}
               key={item.id}
-              className="grid cursor-pointer grid-cols-2 rounded px-2 hover:bg-blue-200"
+              className="grid cursor-pointer grid-cols-3 rounded px-2 hover:bg-blue-200"
             >
-              <div>
+              <div className="col-span-2">
                 {item.displayName}
                 {children.length == 1 && (
                   <span className="ml-2 text-xs font-semibold text-gray-700">
@@ -49,8 +49,14 @@ const DrinkTable: NextPage<Props> = ({ mode, categoryId, parentId }) => {
                   </span>
                 )}
               </div>
-              <div>{(item.price / 100).toFixed(2)}€</div>
-              <div className="col-span-1 -mt-1 text-xs font-semibold text-gray-500">
+              <div>
+                {item.price != 0 ? (
+                  <>{(item.price / 100).toFixed(2)}€</>
+                ) : (
+                  <></>
+                )}
+              </div>
+              <div className="col-span-2 -mt-1 text-xs font-semibold text-gray-500">
                 {item.id}
               </div>
             </Link>
@@ -76,8 +82,8 @@ const DrinkTable: NextPage<Props> = ({ mode, categoryId, parentId }) => {
       )}
       {(drinksQuery.data?.length ?? 0) > 0 && (
         <div className="flex h-full w-full max-w-md flex-col gap-1 overflow-auto rounded-xl bg-white bg-opacity-90 p-4">
-          <div className="grid grid-cols-2 px-2 font-semibold">
-            <div>Name</div>
+          <div className="grid grid-cols-3 px-2 font-semibold">
+            <div className="col-span-2">Name</div>
             <div>Preis</div>
           </div>
           {drinks}

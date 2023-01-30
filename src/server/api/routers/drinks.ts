@@ -9,7 +9,7 @@ export const drinksRouter = createTRPCRouter({
         id: z.string().optional(),
         displayName: z.string().optional(),
         categoryId: z.string().optional(),
-        // barcode: z.number().optional(),
+        icon: z.string().optional(),
         parentId: z.string().optional(),
       })
     )
@@ -22,9 +22,9 @@ export const drinksRouter = createTRPCRouter({
     .input(
       z.object({
         name: z.string(),
-        category: z.string(),
-        price: z.number(),
-        // barcode: z.number().optional(),
+        categoryId: z.string(),
+        price: z.number().optional(),
+        icon: z.string().optional(),
         parentId: z.string().optional(),
       })
     )
@@ -34,13 +34,15 @@ export const drinksRouter = createTRPCRouter({
           data: {
             id: input.name.toLowerCase().replaceAll(" ", "-"),
             displayName: input.name,
-            categoryId: input.category,
-            price: input.price,
-            // barcode: input.barcode || -1,
+            categoryId: input.categoryId,
+            price: input.price || undefined,
+            icon: input.icon || undefined,
             parentId: input.parentId || undefined,
           },
         })
-        .catch((reason) => console.log("Could not create drink " + input.name));
+        .catch((reason) =>
+          console.log("Could not create drink " + input.name, reason)
+        );
     }),
   updateDrink: publicProcedure
     .input(
@@ -50,7 +52,7 @@ export const drinksRouter = createTRPCRouter({
         displayName: z.string().optional(),
         categoryId: z.string().optional(),
         price: z.number().optional(),
-        // barcode: z.number().optional(),
+        icon: z.string().optional(),
         parentId: z.string().optional(),
       })
     )
@@ -64,7 +66,7 @@ export const drinksRouter = createTRPCRouter({
           displayName: input.displayName,
           categoryId: input.categoryId,
           price: input.price,
-          // barcode: input.barcode || -1,
+          icon: input.icon,
           parentId: input.parentId,
         },
       });
@@ -76,10 +78,12 @@ export const drinksRouter = createTRPCRouter({
       })
     )
     .mutation(({ ctx, input }) => {
-      return ctx.prisma.item.delete({
-        where: {
-          id: input.id,
-        },
-      });
+      return ctx.prisma.item
+        .delete({
+          where: {
+            id: input.id,
+          },
+        })
+        .catch((res) => console.log(res));
     }),
 });

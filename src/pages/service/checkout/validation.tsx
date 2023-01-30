@@ -1,12 +1,6 @@
 import { Purchase } from "@prisma/client";
 import { type NextPage } from "next";
-import {
-  ChangeEventHandler,
-  Dispatch,
-  SetStateAction,
-  useEffect,
-  useState,
-} from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { BasketState, ViewState } from "..";
 import { api } from "../../../utils/api";
 
@@ -15,7 +9,7 @@ type Props = {
   changeBasket: Dispatch<SetStateAction<BasketState>>;
   changePage: Dispatch<SetStateAction<"summary" | "scan" | "validation">>;
   basket: BasketState;
-  ticket: number;
+  ticket: string;
 };
 
 const CheckoutValidation: NextPage<Props> = ({
@@ -63,7 +57,9 @@ const CheckoutValidation: NextPage<Props> = ({
               >
                 {result && <>✅</>}
                 <div className="flex flex-row gap-1"></div>
-                <span className="grow">{basketItem.item.displayName}</span>
+                <span className="grow">
+                  {basketItem.count}x {basketItem.item.displayName}
+                </span>
                 <span>
                   {((basketItem.count * basketItem.item.price) / 100).toFixed(
                     2
@@ -98,6 +94,7 @@ const CheckoutValidation: NextPage<Props> = ({
             changePage("summary");
           }}
           className="flex grow-[4] cursor-pointer items-center justify-center rounded-lg bg-white p-2 px-4 align-middle"
+          autoFocus
         >
           Fertig
         </button>

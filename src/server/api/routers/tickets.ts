@@ -9,7 +9,7 @@ export const ticketsRouter = createTRPCRouter({
   findTicket: publicProcedure
     .input(
       z.object({
-        ticketId: z.number(),
+        ticketId: z.string(),
       })
     )
     .query(({ ctx, input }) => {
@@ -19,10 +19,21 @@ export const ticketsRouter = createTRPCRouter({
         },
       });
     }),
+  listTicketsWithPurchaseamount: publicProcedure.query(({ ctx }) => {
+    return ctx.prisma.ticket.findMany({
+      include: {
+        Purchase: {
+          include: {
+            item: true,
+          },
+        },
+      },
+    });
+  }),
   createTicket: publicProcedure
     .input(
       z.object({
-        ticketId: z.number().optional(),
+        ticketId: z.string().optional(),
         holderName: z.string(),
       })
     )
@@ -40,8 +51,8 @@ export const ticketsRouter = createTRPCRouter({
   updateTicket: publicProcedure
     .input(
       z.object({
-        ticketId: z.number(),
-        newTicketId: z.number().optional(),
+        ticketId: z.string(),
+        newTicketId: z.string().optional(),
         holderName: z.string().optional(),
       })
     )
@@ -59,14 +70,16 @@ export const ticketsRouter = createTRPCRouter({
   deleteTicket: publicProcedure
     .input(
       z.object({
-        ticketId: z.number(),
+        ticketId: z.string(),
       })
     )
     .mutation(({ ctx, input }) => {
-      return ctx.prisma.ticket.delete({
-        where: {
-          ticketId: input.ticketId,
-        },
-      });
+      return ctx.prisma.ticket
+        .delete({
+          where: {
+            ticketId: input.ticketId,
+          },
+        })
+        .catch((res) => console.log(res));
     }),
 });

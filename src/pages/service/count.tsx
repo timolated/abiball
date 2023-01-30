@@ -106,6 +106,7 @@ const ServiceDrinkCount: NextPage<Props> = ({ viewState, basketState }) => {
             </button>
           </div>
           <button
+            autoFocus
             onClick={() => {
               viewState.setView((state) => {
                 return { ...state, type: "overview" };

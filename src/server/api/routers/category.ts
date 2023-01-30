@@ -4,7 +4,7 @@ import { createTRPCRouter, publicProcedure } from "../trpc";
 
 export const categoriesRouter = createTRPCRouter({
   getCategoryName: publicProcedure
-    .input(z.object({ categoryId: z.string() }))
+    .input(z.object({ categoryId: z.string(), icon: z.string().optional() }))
     .query(({ ctx, input }) => {
       return ctx.prisma.category.findFirst({
         where: { id: input.categoryId },
@@ -18,6 +18,7 @@ export const categoriesRouter = createTRPCRouter({
     .input(
       z.object({
         displayName: z.string(),
+        icon: z.string().optional(),
       })
     )
     .mutation(({ ctx, input }) => {
@@ -26,6 +27,7 @@ export const categoriesRouter = createTRPCRouter({
           data: {
             id: input.displayName.toLowerCase().replaceAll(" ", "-"),
             displayName: input.displayName,
+            icon: input.icon || undefined,
           },
         })
         .catch((reason) =>
@@ -37,6 +39,7 @@ export const categoriesRouter = createTRPCRouter({
       z.object({
         id: z.string(),
         newDisplayName: z.string(),
+        icon: z.string().optional(),
       })
     )
     .mutation(({ ctx, input }) => {
@@ -47,6 +50,7 @@ export const categoriesRouter = createTRPCRouter({
         data: {
           id: input.newDisplayName.toLowerCase().replace(" ", "-"),
           displayName: input.newDisplayName,
+          icon: input.icon || undefined,
         },
       });
     }),
@@ -66,7 +70,9 @@ export const categoriesRouter = createTRPCRouter({
       ) {
         return "error";
       } else {
-        return ctx.prisma.category.delete({ where: { id: input.id } });
+        return ctx.prisma.category
+          .delete({ where: { id: input.id } })
+          .catch((res) => console.log(res));
       }
     }),
 });

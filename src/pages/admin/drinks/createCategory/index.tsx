@@ -7,9 +7,9 @@ import { api } from "../../../../utils/api";
 
 const Home: NextPage = () => {
   const [formData, setFormData] = useState<{
-    displayName?: string;
-    icon?: string;
-  }>({});
+    displayName: string;
+    icon: string;
+  }>({ displayName: "", icon: "" });
 
   const handleDisplayNameChange: ChangeEventHandler<HTMLInputElement> = (
     event
@@ -24,10 +24,11 @@ const Home: NextPage = () => {
 
   const handleEventSubmit: FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
-    if (!formData.displayName) return;
+    if (formData.displayName.trim() == "") return;
     createCategoryMutation
       .mutateAsync({
-        displayName: formData.displayName,
+        displayName: formData.displayName.trim(),
+        icon: formData.icon.trim() != "" ? formData.icon.trim() : undefined,
       })
       .then((res) => {
         if (res) {
@@ -69,7 +70,7 @@ const Home: NextPage = () => {
                 <input
                   type="text"
                   onChange={handleIconChange}
-                  placeholder="Icon/Emoji"
+                  placeholder="Icon"
                   className="min-w-0 rounded-lg bg-white bg-opacity-70 p-2 font-semibold text-black placeholder-gray-700"
                 />
               </div>

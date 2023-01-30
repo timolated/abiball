@@ -108,6 +108,7 @@ const CheckoutSummary: NextPage<Props> = ({
           Abbrechen
         </button>
         <button
+          autoFocus
           onClick={() => {
             changePage("scan");
           }}

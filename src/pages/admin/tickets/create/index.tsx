@@ -7,14 +7,15 @@ import { api } from "../../../../utils/api";
 
 const Home: NextPage = () => {
   const [formData, setFormData] = useState<{
-    ticketId?: number;
+    ticketId?: string;
     holderName?: string;
   }>({});
 
   const handleTicketIdChange: ChangeEventHandler<HTMLInputElement> = (
     event
   ) => {
-    setFormData({ ...formData, ticketId: parseInt(event.target.value) });
+    if (event.target.value.trim() != "")
+      setFormData({ ...formData, ticketId: event.target.value });
   };
   const handleHolderNameChange: ChangeEventHandler<HTMLInputElement> = (
     event
@@ -29,7 +30,7 @@ const Home: NextPage = () => {
     submitMutation
       .mutateAsync({
         ...formData,
-        holderName: formData.holderName || "TBD",
+        holderName: formData.holderName?.trim() || "Anonym",
       })
       .then((res) => {
         if (res) {
@@ -70,10 +71,11 @@ const Home: NextPage = () => {
               onSubmit={handleEventSubmit}
             >
               <input
-                type="number"
+                type="text"
                 name="ticketId"
                 placeholder="TicketId / Barcode"
                 onChange={handleTicketIdChange}
+                autoFocus
                 className="rounded-lg bg-white bg-opacity-70 p-2 font-semibold text-black placeholder-gray-700"
               />
               <input

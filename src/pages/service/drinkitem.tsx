@@ -60,8 +60,7 @@ const DrinkItem: NextPage<Props> = ({ drink, viewState, basketState }) => {
           key={drink.id}
           className="flex max-w-sm flex-col items-center gap-4 rounded-xl bg-white/10 p-4 text-white transition hover:bg-white/20"
         >
-          {/* <span className="text-9xl">{category.icon??🍷}</span> */}
-          <span className="text-9xl">🍷</span>
+          <span className="text-9xl">{drink.icon ?? <>🍷</>}</span>
           <span className="text-2xl font-semibold">{drink.displayName}</span>
         </button>
       )}

@@ -25,7 +25,7 @@ const ServiceCheckout: NextPage<Props> = ({
   const [chekcoutpage, setChekcoutpage] = useState<
     "summary" | "scan" | "validation"
   >("summary");
-  const [ticketId, setTicketId] = useState<number>(0);
+  const [ticketId, setTicketId] = useState<string>("");
 
   return (
     <>

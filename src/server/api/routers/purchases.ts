@@ -6,7 +6,7 @@ export const purchasesRouter = createTRPCRouter({
   listPurchases: publicProcedure
     .input(
       z.object({
-        buyerId: z.number(),
+        buyerId: z.string(),
       })
     )
     .query(({ ctx, input }) => {
@@ -19,7 +19,7 @@ export const purchasesRouter = createTRPCRouter({
   makePurchase: publicProcedure
     .input(
       z.object({
-        buyerId: z.number(),
+        buyerId: z.string(),
         itemId: z.string(),
         quantity: z.number().optional(),
       })

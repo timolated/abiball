@@ -1,7 +1,5 @@
 import { type NextPage } from "next";
 import Head from "next/head";
-import Link from "next/link";
-import Router from "next/router";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { ViewState } from ".";
 import { api } from "../../utils/api";
@@ -30,8 +28,7 @@ const ServiceOverview: NextPage<Props> = ({ viewState }) => {
           key={item.id}
           className="flex max-w-sm flex-col items-center gap-4 rounded-xl bg-white/10 p-4 text-white transition hover:bg-white/20"
         >
-          {/* <span className="text-9xl">{category.icon??🍷}</span> */}
-          <span className="text-9xl">🍷</span>
+          <span className="text-9xl">{item.icon ?? <>🍷</>}</span>
           <span className="text-2xl font-semibold">{item.displayName}</span>
         </button>
       ))

@@ -1,7 +1,5 @@
 import { type NextPage } from "next";
 import Head from "next/head";
-import Link from "next/link";
-import Router from "next/router";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { BasketState, ViewState } from ".";
 import { api } from "../../utils/api";

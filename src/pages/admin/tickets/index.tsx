@@ -5,7 +5,7 @@ import Router from "next/router";
 import { api } from "../../../utils/api";
 
 const Home: NextPage = () => {
-  const tickets = api.tickets.listTickets.useQuery();
+  const tickets = api.tickets.listTicketsWithPurchaseamount.useQuery();
   const ticketMap = tickets.data?.map((ticket) => (
     <div
       onClick={() => {
@@ -15,11 +15,16 @@ const Home: NextPage = () => {
         });
       }}
       key={ticket.ticketId}
-      className="grid cursor-pointer grid-cols-5 rounded px-2 hover:bg-blue-200"
+      className="grid cursor-pointer grid-cols-6 rounded px-2 hover:bg-blue-200"
     >
-      <div>{ticket.ticketId}</div>
+      <div className="col-span-2">{ticket.ticketId}</div>
       <div className="col-span-2">{ticket.holderName}</div>
-      <div>-0€</div>
+      <div className="pr-4 text-end">
+        {(ticket.Purchase.reduce((i, j) => i + j.item.price, 0) / 100).toFixed(
+          2
+        )}
+        €
+      </div>
       <div>Unbekannt</div>
     </div>
   ));
@@ -41,8 +46,8 @@ const Home: NextPage = () => {
             Ticketkartenverwaltung
           </h1>
           <div className="flex h-full w-full max-w-xl flex-col gap-1 overflow-auto rounded-xl bg-white bg-opacity-90 p-4">
-            <div className="grid grid-cols-5 px-2">
-              <div className="font-bold">Ticket Id</div>
+            <div className="grid grid-cols-6 px-2">
+              <div className="col-span-2 font-bold">Ticket Id</div>
               <div className="col-span-2 font-bold">Name</div>
               <div className="font-bold">Betrag</div>
               <div className="font-bold">Status</div>

@@ -1,9 +1,5 @@
 import { type NextPage } from "next";
-import Head from "next/head";
-import Link from "next/link";
-import Router, { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { api } from "../../../utils/api";
+import { useRouter } from "next/router";
 import CategoryView from "./categoryView";
 import CategoryOverview from "./overview";
 
