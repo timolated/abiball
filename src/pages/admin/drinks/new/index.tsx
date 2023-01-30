@@ -14,11 +14,18 @@ const NewDrinkPage: NextPage = () => {
   const router = useRouter();
   const category = router.query.category;
   const parentId = router.query.parentId;
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    name: string;
+    price: number;
+    icon: string;
+    categoryId: string | undefined;
+    parentId: string | undefined;
+  }>({
     name: "",
     price: 0,
-    category: category?.toString(),
-    parent: parentId?.toString(),
+    icon: "",
+    categoryId: category?.toString(),
+    parentId: parentId?.toString(),
   });
   const categoriesQuery = api.categories.listCategories.useQuery();
   const [drinkCategories, setDrinkCategories] = useState<any>();
@@ -27,7 +34,9 @@ const NewDrinkPage: NextPage = () => {
   useEffect(() => {
     setDrinkCategories(
       categoriesQuery.data?.map((item) => (
-        <option value={item.id}>{item.displayName}</option>
+        <option key={item.id} value={item.id}>
+          {item.displayName}
+        </option>
       ))
     );
   }, [categoriesQuery.dataUpdatedAt]);
@@ -37,21 +46,26 @@ const NewDrinkPage: NextPage = () => {
       //   (drink) => drink.parentId == null
       // );
       let parentDrinks = parentDrinksQuery.data;
-      if (formData.category) {
+      if (formData.categoryId) {
         parentDrinks = parentDrinks?.filter(
-          (drink) => drink.categoryId == formData.category
+          (drink) => drink.categoryId == formData.categoryId
         );
       }
       setParentDrinks(
         parentDrinksQuery.data?.map((item) => (
-          <option value={item.id}>{item.displayName}</option>
+          <option key={item.id} value={item.id}>
+            {item.displayName}
+          </option>
         ))
       );
     }
-  }, [parentDrinksQuery.dataUpdatedAt, formData.category]);
+  }, [parentDrinksQuery.dataUpdatedAt, formData.categoryId]);
 
   const handleNameChange: ChangeEventHandler<HTMLInputElement> = (event) => {
     setFormData({ ...formData, name: event.target.value });
+  };
+  const handleIconChange: ChangeEventHandler<HTMLInputElement> = (event) => {
+    setFormData({ ...formData, icon: event.target.value });
   };
   const handlePriceChange: ChangeEventHandler<HTMLInputElement> = (event) => {
     setFormData({ ...formData, price: parseInt(event.target.value) });
@@ -59,30 +73,35 @@ const NewDrinkPage: NextPage = () => {
   const handleCategoryChange: ChangeEventHandler<HTMLInputElement> = (
     event
   ) => {
-    setFormData({ ...formData, category: event.target.value });
+    setFormData({ ...formData, categoryId: event.target.value });
   };
   const handleParentDrinkChange: ChangeEventHandler<HTMLInputElement> = (
     event
   ) => {
-    setFormData({ ...formData, parent: event.target.value });
+    setFormData({ ...formData, parentId: event.target.value });
   };
 
   const createDrinkMutation = api.drinks.createDrink.useMutation();
   const handleEventSubmit: FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
-    if (!formData.name) return;
-    if (!formData.category) return;
-    if (!formData.price && !formData.parent) return;
+    console.log(formData);
+    if (formData.name.trim() == "") return;
+    if (!formData.categoryId) return;
+    if (formData.price == undefined && !formData.parentId) return;
     createDrinkMutation
       .mutateAsync({
         ...formData,
-        category: formData.category,
+        name: formData.name.trim(),
+        price: formData.price ?? 0,
+        categoryId: formData.categoryId,
+        icon: formData.icon.trim() == "" ? formData.icon : undefined,
       })
       .then((res) => {
         if (res) {
-          router.push(`/admin/drinks?category=${formData.category}`);
+          router.back();
+          // router.push(`/admin/drinks?category=${formData.categoryId}`);
         } else {
-          console.log("error trying to create category");
+          console.log("error trying to create drink");
         }
       });
   };
@@ -114,13 +133,20 @@ const NewDrinkPage: NextPage = () => {
               onSubmit={handleEventSubmit}
               className="flex w-full flex-col gap-2 "
             >
-              <input
-                required
-                onChange={handleNameChange}
-                type="text"
-                placeholder="Name"
-                className="rounded-lg bg-white bg-opacity-70 p-2 font-semibold text-black placeholder-gray-700"
-              />
+              <div className="flex flex-row gap-2">
+                <input
+                  type="text"
+                  onChange={handleNameChange}
+                  placeholder="Name"
+                  className="rounded-lg bg-white bg-opacity-70 p-2 font-semibold text-black placeholder-gray-700"
+                />
+                <input
+                  type="text"
+                  onChange={handleIconChange}
+                  placeholder="Icon/Emoji"
+                  className="min-w-0 rounded-lg bg-white bg-opacity-70 p-2 font-semibold text-black placeholder-gray-700"
+                />
+              </div>
               <input
                 type="number"
                 onChange={handlePriceChange}
@@ -139,19 +165,17 @@ const NewDrinkPage: NextPage = () => {
                 />
                 <datalist id="drink-categories">{drinkCategories}</datalist>
               </>
-              {parentId && (
-                <>
-                  <input
-                    type="text"
-                    defaultValue={parentId}
-                    onChange={handleParentDrinkChange}
-                    placeholder="Obergetränk"
-                    list="parent-drinks"
-                    className="rounded-lg bg-white bg-opacity-70 p-2 font-semibold text-black placeholder-gray-700"
-                  />
-                  <datalist id="parent-drinks">{parentDrinks}</datalist>
-                </>
-              )}
+              <>
+                <input
+                  type="text"
+                  defaultValue={parentId}
+                  onChange={handleParentDrinkChange}
+                  placeholder="Obergetränk"
+                  list="parent-drinks"
+                  className="rounded-lg bg-white bg-opacity-70 p-2 font-semibold text-black placeholder-gray-700"
+                />
+                <datalist id="parent-drinks">{parentDrinks}</datalist>
+              </>
               <input
                 type="submit"
                 value="Speichern"
