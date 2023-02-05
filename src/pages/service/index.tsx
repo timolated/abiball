@@ -37,7 +37,7 @@ const ServiceHome: NextPage = () => {
   }, [basket]);
 
   return (
-    <>
+    <main className="flex h-screen items-center justify-center overflow-auto bg-gradient-to-b from-blue-600 to-violet-700">
       {view.type == "overview" && (
         <ServiceOverview viewState={{ view, setView }} />
       )}
@@ -63,7 +63,7 @@ const ServiceHome: NextPage = () => {
           changeBasket={setBasket}
         />
       )}
-    </>
+    </main>
   );
 };
 
