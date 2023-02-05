@@ -19,13 +19,10 @@ const TicketDetailsPage: NextPage = () => {
   }>({ ticketId: "", holderName: "" });
   const [ticketId, setTicketId] = useState("");
 
-  const ticketQuery = api.tickets.findTicket.useQuery(
+  const ticketQuery = api.tickets.findTicketWithPurchaseamount.useQuery(
     { ticketId: ticketId },
     { refetchOnWindowFocus: false }
   );
-  const purchasesQuery = api.purchases.listPurchases.useQuery({
-    buyerId: ticketId,
-  });
   const submitMutation = api.tickets.updateTicket.useMutation();
 
   useEffect(() => {
@@ -201,18 +198,31 @@ const TicketDetailsPage: NextPage = () => {
               </button>
             </div>
           )}
-          {ticketId.trim() != "" && purchasesQuery.data && (
+          {ticketId.trim() != "" && ticketQuery.data?.Purchase && (
             <div className="flex w-full max-w-sm flex-col rounded-xl bg-white/10 p-4 text-white transition ">
+              <div className="font-bold">
+                Total:{" "}
+                {(
+                  ticketQuery.data?.Purchase.reduce(
+                    (i, j) => i + j.item.price * j.quantity,
+                    0
+                  ) / 100
+                ).toFixed(2)}
+                €
+              </div>
               <div>Purchases:</div>
-              {purchasesQuery.data.map((item) => {
+              {ticketQuery.data?.Purchase.map((item) => {
                 // timeStamp.format();
                 return (
                   <div
                     key={item.purchaseId}
-                    className="flex grow flex-row justify-between"
+                    className="flex grow flex-row justify-between gap-2"
                   >
-                    <span>
+                    <span className="grow">
                       {item.quantity}x {item.itemId}
+                    </span>
+                    <span className="text-sm font-semibold">
+                      {item.quantity}x {(item.item.price / 100).toFixed(2)}€
                     </span>
                     <abbr
                       className="cursor-help no-underline"

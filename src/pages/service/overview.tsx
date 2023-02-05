@@ -47,7 +47,7 @@ const ServiceOverview: NextPage<Props> = ({ viewState }) => {
           <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
             Getränke
           </h1>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8">
+          <div className="grid grid-cols-1 gap-4 pb-16 sm:grid-cols-2 md:gap-8 md:pb-0">
             {drinkCategories}
           </div>
         </div>

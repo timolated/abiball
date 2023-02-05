@@ -19,6 +19,22 @@ export const ticketsRouter = createTRPCRouter({
         },
       });
     }),
+  findTicketWithPurchaseamount: publicProcedure
+    .input(z.object({ ticketId: z.string() }))
+    .query(({ ctx, input }) => {
+      return ctx.prisma.ticket.findFirst({
+        where: {
+          ...input,
+        },
+        include: {
+          Purchase: {
+            include: {
+              item: true,
+            },
+          },
+        },
+      });
+    }),
   listTicketsWithPurchaseamount: publicProcedure.query(({ ctx }) => {
     return ctx.prisma.ticket.findMany({
       include: {

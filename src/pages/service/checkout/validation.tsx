@@ -20,6 +20,7 @@ const CheckoutValidation: NextPage<Props> = ({
   ticket,
 }) => {
   const [transactions, setTransactions] = useState<Purchase[]>([]);
+  const getTicketQunery = api.tickets.findTicket.useQuery({ ticketId: ticket });
   const processpurchasemutation = api.purchases.makePurchase.useMutation();
   const process = async () => {
     let purchases: Purchase[] = [];
@@ -44,7 +45,9 @@ const CheckoutValidation: NextPage<Props> = ({
         </div>
       )}
       <div className="flex w-full max-w-md flex-col gap-2 rounded-xl bg-gradient-to-b from-white/10 to-white/20 p-2">
-        <h1 className="text-xl font-bold tracking-tight text-white">Auftrag</h1>
+        <h1 className="text-xl font-semibold tracking-tight text-white">
+          Auftrag für {getTicketQunery.data?.holderName}
+        </h1>
         <div className="flex flex-col gap-1">
           {[...basket.items.values()].map((basketItem) => {
             const result = transactions.find(

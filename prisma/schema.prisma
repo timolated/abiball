@@ -24,7 +24,7 @@ model Item {
   category    Category   @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   Purchase    Purchase[]
   categoryId  String
-  price       Int @default(0)
+  price       Int        @default(0)
   icon        String?
 
   parentItem    Item?   @relation("ParentChild", fields: [parentId], references: [id], onDelete: Cascade)
@@ -47,4 +47,5 @@ model Purchase {
   itemId     String
   quantity   Int      @default(1)
   timestamp  DateTime @default(now())
+  paid       Boolean  @default(false)
 }

@@ -1,7 +1,8 @@
 import { type NextPage } from "next";
 import { ChangeEventHandler, Dispatch, SetStateAction, useEffect } from "react";
-import { BasketState, ViewState } from "..";
+import { ViewState } from "..";
 import { api } from "../../../utils/api";
+import CameraScanNeo from "./cameraScanNeo";
 
 type Props = {
   changeView: Dispatch<SetStateAction<ViewState>>;
@@ -22,13 +23,14 @@ const CheckoutScan: NextPage<Props> = ({ changeView, changePage, ticket }) => {
   };
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center gap-2 bg-gradient-to-b from-blue-600 to-violet-700">
-      <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
+    <div className="flex flex-col items-center justify-center gap-2 px-2">
+      <h1 className="text-5xl font-extrabold tracking-tight text-white md:text-3xl">
         Ticket scannen
       </h1>
       <h2 className="text-3xl font-bold text-white">
         {ticketQuery.data?.holderName}
       </h2>
+      <CameraScanNeo changePage={changePage} setTicket={ticket.setTicket} />
       <form
         onSubmit={() => {
           if (ticketQuery.data) changePage("validation");
@@ -61,7 +63,7 @@ const CheckoutScan: NextPage<Props> = ({ changeView, changePage, ticket }) => {
           Bestätigen
         </button>
       </div>
-    </main>
+    </div>
   );
 };
 

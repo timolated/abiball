@@ -1,12 +1,19 @@
+import { Item, Purchase, Ticket } from "@prisma/client";
 import { type NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import Router from "next/router";
 import { api } from "../../../utils/api";
 
+type TicketWithQuery = Ticket & {
+  Purchase: (Purchase & {
+    item: Item;
+  })[];
+};
+
 const Home: NextPage = () => {
   const tickets = api.tickets.listTicketsWithPurchaseamount.useQuery();
-  const ticketMap = tickets.data?.map((ticket) => (
+  const ticketMap = tickets.data?.map((ticket: TicketWithQuery) => (
     <div
       onClick={() => {
         Router.push({
@@ -20,9 +27,10 @@ const Home: NextPage = () => {
       <div className="col-span-2">{ticket.ticketId}</div>
       <div className="col-span-2">{ticket.holderName}</div>
       <div className="pr-4 text-end">
-        {(ticket.Purchase.reduce((i, j) => i + j.item.price, 0) / 100).toFixed(
-          2
-        )}
+        {(
+          ticket.Purchase.reduce((i, j) => i + j.item.price * j.quantity, 0) /
+          100
+        ).toFixed(2)}
         €
       </div>
       <div>Unbekannt</div>

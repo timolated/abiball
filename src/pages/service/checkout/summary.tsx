@@ -54,8 +54,8 @@ const CheckoutSummary: NextPage<Props> = ({
     });
   };
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center gap-2 bg-gradient-to-b from-blue-600 to-violet-700">
-      <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
+    <div className="flex grow flex-col items-center justify-center gap-2 px-2">
+      <h1 className="text-3xl font-extrabold tracking-tight text-white md:text-6xl">
         Zusammenfassung
       </h1>
       <div className="flex w-full max-w-md flex-col gap-2 rounded-xl bg-gradient-to-b from-white/10 to-white/20 p-2">
@@ -103,7 +103,7 @@ const CheckoutSummary: NextPage<Props> = ({
               return { ...state, type: "overview" };
             });
           }}
-          className="flex grow  cursor-pointer items-center justify-center rounded-lg bg-gradient-to-b from-red-500 to-red-600 p-2 px-4 align-middle text-white focus:from-red-600 focus:to-red-700 focus:outline-white"
+          className="flex grow cursor-pointer items-center justify-center rounded-lg bg-gradient-to-b from-red-500 to-red-600 p-2 px-4 align-middle text-white focus:from-red-600 focus:to-red-700 focus:outline-white"
         >
           Abbrechen
         </button>
@@ -117,7 +117,7 @@ const CheckoutSummary: NextPage<Props> = ({
           Weiter
         </button>
       </div>
-    </main>
+    </div>
   );
 };
 
