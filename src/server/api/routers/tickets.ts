@@ -60,8 +60,10 @@ export const ticketsRouter = createTRPCRouter({
             ...input,
           },
         })
-        .catch((reason) =>
-          console.log("Could not create ticket with id " + input.ticketId)
+        .catch(() =>
+          console.log(
+            `Could not create ticket with id ${input.ticketId ?? "[unkown id]"}`
+          )
         );
     }),
   updateTicket: publicProcedure

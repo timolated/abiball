@@ -2,7 +2,8 @@ import { type NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import Router from "next/router";
-import { useState, ChangeEventHandler, FormEventHandler } from "react";
+import type { ChangeEventHandler, FormEventHandler } from "react";
+import { useState } from "react";
 import { api } from "../../../../utils/api";
 
 const Home: NextPage = () => {
@@ -32,11 +33,12 @@ const Home: NextPage = () => {
       })
       .then((res) => {
         if (res) {
-          Router.push("/admin/drinks");
+          void Router.push("/admin/drinks");
         } else {
-          console.log("error trying to create category");
+          console.error("error trying to create category");
         }
-      });
+      })
+      .catch((error) => console.error(error));
   };
   return (
     <>

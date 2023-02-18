@@ -1,7 +1,8 @@
-import { Item, Purchase, Ticket } from "@prisma/client";
-import { NextPage } from "next";
+import type { Item, Purchase, Ticket } from "@prisma/client";
+import type { NextPage } from "next";
 import Head from "next/head";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import type { Dispatch, SetStateAction } from "react";
+import { useEffect, useState } from "react";
 import { api } from "../../utils/api";
 
 type Props = {
@@ -18,13 +19,7 @@ type data =
     >
   | undefined;
 
-const groupBy = <T, K extends keyof any>(arr: T[], key: (i: T) => K) =>
-  arr.reduce((groups, item) => {
-    (groups[key(item)] ||= []).push(item);
-    return groups;
-  }, {} as Record<K, T[]>);
-
-const CheckInTicketPage: NextPage<Props> = ({ changeView, ticket }) => {
+const CheckInTicketPage: NextPage<Props> = ({ ticket }) => {
   const ticketQuery = api.tickets.findTicketWithPurchaseamount.useQuery({
     ticketId: ticket.ticketId,
   });
@@ -33,10 +28,6 @@ const CheckInTicketPage: NextPage<Props> = ({ changeView, ticket }) => {
     if (!ticketQuery.data) return;
 
     ticketQuery.data?.Purchase.map((purchase) => <>{purchase.itemId}</>);
-    const purchasesOrderedByItemId = groupBy(
-      ticketQuery.data?.Purchase!,
-      (i) => i.itemId
-    );
 
     const purchasesGroupedByItemId = new Map<
       string,
@@ -161,7 +152,7 @@ const CheckInTicketPage: NextPage<Props> = ({ changeView, ticket }) => {
                 {data
                   .get(item)!
                   .reduce((prev, curr) => (prev += curr.quantity), 0)}
-                x {(data.get(item)![0]?.item.price! / 100).toFixed(2)}€
+                x {(data.get(item)![0]?.item.price ?? 0 / 100).toFixed(2)}€
               </span>
               <span className="">
                 {(

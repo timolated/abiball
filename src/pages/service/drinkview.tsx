@@ -1,7 +1,8 @@
 import { type NextPage } from "next";
 import Head from "next/head";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { BasketState, ViewState } from ".";
+import type { Dispatch, SetStateAction } from "react";
+import { useEffect, useState } from "react";
+import type { BasketState, ViewState } from ".";
 import { api } from "../../utils/api";
 import DrinkItem from "./drinkitem";
 
@@ -18,7 +19,7 @@ type Props = {
 
 const ServiceDrinkview: NextPage<Props> = ({ viewState, basketState }) => {
   const drinksQuery = api.drinks.listDrinks.useQuery({});
-  const [drinkCategories, setDrinkCategories] = useState<any>();
+  const [drinkCategories, setDrinkCategories] = useState<JSX.Element[]>();
   useEffect(() => {
     const drinksData = drinksQuery.data?.filter((item) => {
       if (viewState.view.type == "category") {
@@ -32,13 +33,14 @@ const ServiceDrinkview: NextPage<Props> = ({ viewState, basketState }) => {
     setDrinkCategories(
       drinksData.map((item) => (
         <DrinkItem
+          key={item.id}
           drink={item}
           viewState={viewState}
           basketState={basketState}
         />
       ))
     );
-  }, [drinksQuery.dataUpdatedAt, viewState]);
+  }, [basketState, drinksQuery.data, drinksQuery.dataUpdatedAt, viewState]);
 
   return (
     <>

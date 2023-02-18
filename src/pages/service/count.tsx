@@ -1,14 +1,9 @@
-import { Item } from "@prisma/client";
+import type { Item } from "@prisma/client";
 import { type NextPage } from "next";
 import Head from "next/head";
-import {
-  ChangeEventHandler,
-  Dispatch,
-  SetStateAction,
-  useEffect,
-  useState,
-} from "react";
-import { BasketState, ViewState } from ".";
+import type { ChangeEventHandler, Dispatch, SetStateAction } from "react";
+import { useEffect, useState } from "react";
+import type { BasketState, ViewState } from ".";
 
 type Props = {
   viewState: {
@@ -25,7 +20,7 @@ const ServiceDrinkCount: NextPage<Props> = ({ viewState, basketState }) => {
   const [item, setItem] = useState<{ item: Item; count: number } | undefined>();
   useEffect(() => {
     setItem(basketState.basket.items.get(viewState.view.parentId!));
-  }, []);
+  }, [basketState.basket.items, viewState.view.parentId]);
   const handleCountChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const value = parseInt(e.target.value);
     changeValue(value);

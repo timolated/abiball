@@ -2,12 +2,8 @@ import { type NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import Router, { useRouter } from "next/router";
-import {
-  useState,
-  ChangeEventHandler,
-  FormEventHandler,
-  useEffect,
-} from "react";
+import type { ChangeEventHandler, FormEventHandler } from "react";
+import { useState, useEffect } from "react";
 import { api } from "../../../../utils/api";
 import DrinkTable from "../drinkTable";
 
@@ -29,9 +25,9 @@ const DrinkDetailsPage: NextPage = () => {
     { refetchOnWindowFocus: false }
   );
   const categoriesQuery = api.categories.listCategories.useQuery();
-  const [drinkCategories, setDrinkCategories] = useState<any>();
+  const [drinkCategories, setDrinkCategories] = useState<JSX.Element[]>();
   const parentDrinksQuery = api.drinks.listDrinks.useQuery({});
-  const [parentDrinks, setParentDrinks] = useState<any>();
+  const [parentDrinks, setParentDrinks] = useState<JSX.Element[]>();
   useEffect(() => {
     if (currentDrinkQuery.data) {
       const drinkData = currentDrinkQuery.data[0];
@@ -44,7 +40,7 @@ const DrinkDetailsPage: NextPage = () => {
         parentId: drinkData?.parentId || "",
       });
     }
-  }, [currentDrinkQuery.dataUpdatedAt]);
+  }, [currentDrinkQuery.data, currentDrinkQuery.dataUpdatedAt]);
   useEffect(() => {
     setDrinkCategories(
       categoriesQuery.data?.map((item) => (
@@ -53,7 +49,7 @@ const DrinkDetailsPage: NextPage = () => {
         </option>
       ))
     );
-  }, [categoriesQuery.dataUpdatedAt]);
+  }, [categoriesQuery.data, categoriesQuery.dataUpdatedAt]);
   useEffect(() => {
     if (parentDrinksQuery.data) {
       const possibleParentDrinks = parentDrinksQuery.data?.filter(
@@ -68,7 +64,12 @@ const DrinkDetailsPage: NextPage = () => {
         ))
       );
     }
-  }, [parentDrinksQuery.dataUpdatedAt, formData.categoryId]);
+  }, [
+    parentDrinksQuery.dataUpdatedAt,
+    formData.categoryId,
+    parentDrinksQuery.data,
+    drink,
+  ]);
 
   const handleIdChange: ChangeEventHandler<HTMLInputElement> = (event) => {
     setFormData({ ...formData, id: event.target.value });
@@ -117,7 +118,8 @@ const DrinkDetailsPage: NextPage = () => {
         } else {
           console.log("error trying to update drink");
         }
-      });
+      })
+      .catch((error) => console.error(error));
   };
 
   // löschlogik
@@ -132,19 +134,22 @@ const DrinkDetailsPage: NextPage = () => {
     if (!confirmPopup) setConfirmed(true);
     else {
       if (!drink) return;
-      deleteDrinkMutation.mutateAsync({ id: drink.toString() }).then((res) => {
-        if (res) {
-          Router.back();
-        } else {
-          console.log("error trying to delete drink");
-          setDeleteError(
-            <span className="rounded bg-black p-2 font-semibold text-red-700">
-              Löschen nicht möglich. Das Getränk wurde vermutlich bereits
-              gekauft
-            </span>
-          );
-        }
-      });
+      deleteDrinkMutation
+        .mutateAsync({ id: drink.toString() })
+        .then((res) => {
+          if (res) {
+            Router.back();
+          } else {
+            console.log("error trying to delete drink");
+            setDeleteError(
+              <span className="rounded bg-black p-2 font-semibold text-red-700">
+                Löschen nicht möglich. Das Getränk wurde vermutlich bereits
+                gekauft
+              </span>
+            );
+          }
+        })
+        .catch((error) => console.error(error));
     }
   };
 

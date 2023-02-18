@@ -1,5 +1,5 @@
-import { Ticket } from "@prisma/client";
-import { NextPage } from "next";
+import type { Ticket } from "@prisma/client";
+import type { NextPage } from "next";
 import { useState } from "react";
 import CameraScanNeo from "./cameraScanNeo";
 import CheckInTicketPage from "./checkin";

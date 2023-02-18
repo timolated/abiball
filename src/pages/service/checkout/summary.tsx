@@ -1,6 +1,7 @@
 import { type NextPage } from "next";
-import { ChangeEventHandler, Dispatch, SetStateAction, useEffect } from "react";
-import { BasketState, ViewState } from "..";
+import type { ChangeEventHandler, Dispatch, SetStateAction } from "react";
+import { useEffect } from "react";
+import type { BasketState, ViewState } from "..";
 
 type Props = {
   changeView: Dispatch<SetStateAction<ViewState>>;
@@ -16,7 +17,7 @@ const CheckoutSummary: NextPage<Props> = ({
   changePage,
 }) => {
   let itemCount = 0;
-  const _ = [...basket.items.values()].forEach((basketItem) => {
+  [...basket.items.values()].forEach((basketItem) => {
     itemCount += basketItem.count;
   });
   useEffect(() => {
@@ -28,7 +29,7 @@ const CheckoutSummary: NextPage<Props> = ({
         };
       });
     }
-  }, [basket]);
+  }, [basket, changeView]);
   const handleCountChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const value = parseInt(e.target.value);
     const itemId = e.target.getAttribute("itemID");

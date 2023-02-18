@@ -1,4 +1,4 @@
-import { Item } from "@prisma/client";
+import type { Item } from "@prisma/client";
 import { type NextPage } from "next";
 import { useEffect, useState } from "react";
 import ServiceCheckout from "./checkout";

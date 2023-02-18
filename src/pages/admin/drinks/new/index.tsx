@@ -1,13 +1,8 @@
 import { type NextPage } from "next";
 import Head from "next/head";
-import Link from "next/link";
 import Router, { useRouter } from "next/router";
-import {
-  ChangeEventHandler,
-  FormEventHandler,
-  useEffect,
-  useState,
-} from "react";
+import type { ChangeEventHandler, FormEventHandler } from "react";
+import { useEffect, useState } from "react";
 import { api } from "../../../../utils/api";
 
 const NewDrinkPage: NextPage = () => {
@@ -28,9 +23,9 @@ const NewDrinkPage: NextPage = () => {
     parentId: parentId?.toString(),
   });
   const categoriesQuery = api.categories.listCategories.useQuery();
-  const [drinkCategories, setDrinkCategories] = useState<any>();
+  const [drinkCategories, setDrinkCategories] = useState<JSX.Element[]>();
   const parentDrinksQuery = api.drinks.listDrinks.useQuery({});
-  const [parentDrinks, setParentDrinks] = useState<any>();
+  const [parentDrinks, setParentDrinks] = useState<JSX.Element[]>();
   useEffect(() => {
     setDrinkCategories(
       categoriesQuery.data?.map((item) => (
@@ -39,18 +34,9 @@ const NewDrinkPage: NextPage = () => {
         </option>
       ))
     );
-  }, [categoriesQuery.dataUpdatedAt]);
+  }, [categoriesQuery.data, categoriesQuery.dataUpdatedAt]);
   useEffect(() => {
     if (parentDrinksQuery.data) {
-      // let parentDrinks = parentDrinksQuery.data?.filter(
-      //   (drink) => drink.parentId == null
-      // );
-      let parentDrinks = parentDrinksQuery.data;
-      if (formData.categoryId) {
-        parentDrinks = parentDrinks?.filter(
-          (drink) => drink.categoryId == formData.categoryId
-        );
-      }
       setParentDrinks(
         parentDrinksQuery.data?.map((item) => (
           <option key={item.id} value={item.id}>
@@ -59,7 +45,11 @@ const NewDrinkPage: NextPage = () => {
         ))
       );
     }
-  }, [parentDrinksQuery.dataUpdatedAt, formData.categoryId]);
+  }, [
+    parentDrinksQuery.dataUpdatedAt,
+    formData.categoryId,
+    parentDrinksQuery.data,
+  ]);
 
   const handleNameChange: ChangeEventHandler<HTMLInputElement> = (event) => {
     setFormData({ ...formData, name: event.target.value });
@@ -103,7 +93,8 @@ const NewDrinkPage: NextPage = () => {
         } else {
           console.log("error trying to create drink");
         }
-      });
+      })
+      .catch((error) => console.error(error));
   };
 
   return (

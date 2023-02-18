@@ -1,14 +1,9 @@
-import { timeStamp } from "console";
 import { type NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import Router, { useRouter } from "next/router";
-import {
-  useState,
-  ChangeEventHandler,
-  FormEventHandler,
-  useEffect,
-} from "react";
+import type { ChangeEventHandler, FormEventHandler } from "react";
+import { useState, useEffect } from "react";
 import { api } from "../../../../utils/api";
 
 const TicketDetailsPage: NextPage = () => {
@@ -29,7 +24,7 @@ const TicketDetailsPage: NextPage = () => {
     if (router.isReady && typeof router.query.ticketId == "string") {
       setTicketId(router.query.ticketId);
     }
-  }, [router.isReady]);
+  }, [router.isReady, router.query.ticketId]);
 
   useEffect(() => {
     if (
@@ -42,7 +37,12 @@ const TicketDetailsPage: NextPage = () => {
         holderName: ticketQuery.data?.holderName,
       });
     }
-  }, [ticketQuery.dataUpdatedAt]);
+  }, [
+    ticketId,
+    ticketQuery.data,
+    ticketQuery.dataUpdatedAt,
+    ticketQuery.isLoading,
+  ]);
 
   const handleTicketIdChange: ChangeEventHandler<HTMLInputElement> = (
     event
@@ -73,7 +73,8 @@ const TicketDetailsPage: NextPage = () => {
         } else {
           console.log("error trying to update ticket");
         }
-      });
+      })
+      .catch((error) => console.error(error));
   };
 
   // löschlogik
@@ -88,18 +89,21 @@ const TicketDetailsPage: NextPage = () => {
   const handleDeleteRequest = () => {
     if (!confirmPopup) setConfirmed(true);
     else {
-      deleteTicketMutation.mutateAsync({ ticketId: ticketId }).then((res) => {
-        if (res) {
-          Router.back();
-        } else {
-          console.log("error trying to delete ticket");
-          setDeleteError(
-            <span className="rounded bg-black p-2 font-semibold text-red-700">
-              Löschen nicht möglich
-            </span>
-          );
-        }
-      });
+      deleteTicketMutation
+        .mutateAsync({ ticketId: ticketId })
+        .then((res) => {
+          if (res) {
+            Router.back();
+          } else {
+            console.log("error trying to delete ticket");
+            setDeleteError(
+              <span className="rounded bg-black p-2 font-semibold text-red-700">
+                Löschen nicht möglich
+              </span>
+            );
+          }
+        })
+        .catch((error) => console.error(error));
     }
   };
 

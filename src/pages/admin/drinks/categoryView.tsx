@@ -28,7 +28,7 @@ const CategoryView: NextPage<Props> = ({ categoryId }) => {
     else {
       deleteCategoryMutation
         .mutateAsync({ id: categoryId })
-        .then((res: any) => {
+        .then((res) => {
           if (res != "error") {
             Router.back();
           } else {
@@ -39,7 +39,8 @@ const CategoryView: NextPage<Props> = ({ categoryId }) => {
               </span>
             );
           }
-        });
+        })
+        .catch((error) => console.error(error));
     }
   };
 

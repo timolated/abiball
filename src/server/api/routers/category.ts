@@ -1,4 +1,4 @@
-import { string, z } from "zod";
+import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "../trpc";
 
@@ -30,7 +30,7 @@ export const categoriesRouter = createTRPCRouter({
             icon: input.icon || undefined,
           },
         })
-        .catch((reason) =>
+        .catch(() =>
           console.log("Could not create category " + input.displayName)
         );
     }),

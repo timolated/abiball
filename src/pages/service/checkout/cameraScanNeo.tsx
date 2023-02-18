@@ -1,6 +1,7 @@
-import { NextPage } from "next";
+import type { NextPage } from "next";
 import { BrowserMultiFormatReader } from "@zxing/library";
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import type { Dispatch, SetStateAction } from "react";
+import { useEffect, useRef, useState } from "react";
 import { api } from "../../../utils/api";
 
 type Props = {
@@ -19,34 +20,37 @@ const CameraScanNeo: NextPage<Props> = ({ changePage, setTicket }) => {
 
   useEffect(() => {
     if (!videoRef.current) return;
-    reader.current.decodeFromConstraints(
-      {
-        audio: false,
-        video: {
-          facingMode: "environment",
+    reader.current
+      .decodeFromConstraints(
+        {
+          audio: false,
+          video: {
+            facingMode: "environment",
+          },
         },
-      },
-      videoRef.current,
-      (result, error) => {
-        if (result) {
-          setResult(result.getText());
-          setTicket(result.getText());
-          console.log(result); //debug
+        videoRef.current,
+        (result, error) => {
+          if (result) {
+            setResult(result.getText());
+            setTicket(result.getText());
+            console.log(result); //debug
+          }
+          if (error) return;
         }
-        if (error) return;
-      }
-    );
+      )
+      .catch((error) => console.error(error));
     return () => {
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       reader.current.reset();
     };
-  }, [videoRef]);
+  }, [setTicket, videoRef]);
 
   // change page if ticket is actual ticket
   useEffect(() => {
     if (ticketExistsQuery.data) {
       changePage("validation");
     }
-  }, [ticketExistsQuery.data]);
+  }, [changePage, ticketExistsQuery.data]);
 
   return (
     <>

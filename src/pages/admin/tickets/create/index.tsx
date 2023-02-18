@@ -1,8 +1,8 @@
 import { type NextPage } from "next";
 import Head from "next/head";
-import Link from "next/link";
 import Router from "next/router";
-import { useState, ChangeEventHandler, FormEventHandler } from "react";
+import type { ChangeEventHandler, FormEventHandler } from "react";
+import { useState } from "react";
 import { api } from "../../../../utils/api";
 
 const Home: NextPage = () => {
@@ -38,7 +38,8 @@ const Home: NextPage = () => {
         } else {
           console.log("error trying to create ticket");
         }
-      });
+      })
+      .catch((error) => console.error(error));
 
     setFormData({ ...formData, holderName: "" });
   };

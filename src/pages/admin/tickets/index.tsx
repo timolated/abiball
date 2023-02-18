@@ -1,4 +1,4 @@
-import { Item, Purchase, Ticket } from "@prisma/client";
+import type { Item, Purchase, Ticket } from "@prisma/client";
 import { type NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
@@ -19,7 +19,7 @@ const Home: NextPage = () => {
         Router.push({
           pathname: "/admin/tickets/details",
           query: { ticketId: ticket.ticketId },
-        });
+        }).catch((error) => console.error(error));
       }}
       key={ticket.ticketId}
       className="grid cursor-pointer grid-cols-6 rounded px-2 hover:bg-blue-200"

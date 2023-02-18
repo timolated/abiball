@@ -1,4 +1,4 @@
-import { NextPage } from "next";
+import type { NextPage } from "next";
 import Link from "next/link";
 import Router from "next/router";
 import { useEffect, useState } from "react";
@@ -15,22 +15,22 @@ const DrinkTable: NextPage<Props> = ({ mode, categoryId, parentId }) => {
     categoryId: categoryId,
     parentId: parentId,
   });
-  const [drinks, setDrinks] = useState<any>();
+  const [drinks, setDrinks] = useState<(JSX.Element | undefined)[]>();
 
   useEffect(() => {
-    let queryResult = drinksQuery.data;
+    const queryResult = drinksQuery.data;
     if (!queryResult) return;
     const table = queryResult.map((item) => {
       if (
         (mode == "category" && !item.parentId) ||
         (mode == "drink" && item.parentId == parentId)
       ) {
-        const children = queryResult!.filter(
+        const children = queryResult.filter(
           (child) => child.parentId == item.id
         );
 
         return (
-          <div className=" contents" key={item.id}>
+          <div className="contents" key={item.id}>
             <Link
               href={`/admin/drinks/details?drink=${item.id}`}
               key={item.id}
@@ -65,7 +65,7 @@ const DrinkTable: NextPage<Props> = ({ mode, categoryId, parentId }) => {
       }
     });
     setDrinks(table);
-  }, [drinksQuery.dataUpdatedAt]);
+  }, [drinksQuery.data, drinksQuery.dataUpdatedAt, mode, parentId]);
 
   return (
     <>

@@ -1,6 +1,6 @@
 import { type NextPage } from "next";
-import { Dispatch, SetStateAction } from "react";
-import { BasketState, ViewState } from ".";
+import type { Dispatch, SetStateAction } from "react";
+import type { BasketState, ViewState } from ".";
 
 type Props = {
   changeView: Dispatch<SetStateAction<ViewState>>;
@@ -9,7 +9,7 @@ type Props = {
 
 const ServiceSubtotal: NextPage<Props> = ({ basket, changeView }) => {
   let itemCount = 0;
-  const _ = [...basket.items.values()].forEach((basketItem) => {
+  [...basket.items.values()].forEach((basketItem) => {
     itemCount += basketItem.count;
   });
   return (

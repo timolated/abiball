@@ -1,7 +1,8 @@
-import { Purchase } from "@prisma/client";
+import type { Purchase } from "@prisma/client";
 import { type NextPage } from "next";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { BasketState, ViewState } from "..";
+import type { Dispatch, SetStateAction } from "react";
+import { useEffect, useState } from "react";
+import type { BasketState, ViewState } from "..";
 import { api } from "../../../utils/api";
 
 type Props = {
@@ -22,21 +23,22 @@ const CheckoutValidation: NextPage<Props> = ({
   const [transactions, setTransactions] = useState<Purchase[]>([]);
   const getTicketQunery = api.tickets.findTicket.useQuery({ ticketId: ticket });
   const processpurchasemutation = api.purchases.makePurchase.useMutation();
-  const process = async () => {
-    let purchases: Purchase[] = [];
-    [...basket.items.values()].forEach(async (basketItem) => {
-      const purchase = await processpurchasemutation.mutateAsync({
-        buyerId: ticket,
-        quantity: basketItem.count,
-        itemId: basketItem.item.id,
-      });
-      purchases.push(purchase);
-    });
-    setTransactions(purchases);
-  };
   useEffect(() => {
-    process();
-  }, []);
+    const process = () => {
+      const purchases: Purchase[] = [];
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises
+      [...basket.items.values()].forEach(async (basketItem) => {
+        const purchase = await processpurchasemutation.mutateAsync({
+          buyerId: ticket,
+          quantity: basketItem.count,
+          itemId: basketItem.item.id,
+        });
+        purchases.push(purchase);
+      });
+      setTransactions(purchases);
+    };
+    void process();
+  }, [basket.items, processpurchasemutation, ticket]);
   return (
     <main className="flex min-h-screen flex-col items-center justify-center gap-2 bg-gradient-to-b from-blue-600 to-violet-700">
       {transactions.length == basket.items.size && (

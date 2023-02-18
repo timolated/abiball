@@ -1,6 +1,6 @@
 import { type NextPage } from "next";
-import { ChangeEventHandler, Dispatch, SetStateAction, useEffect } from "react";
-import { ViewState } from "..";
+import type { ChangeEventHandler, Dispatch, SetStateAction } from "react";
+import type { ViewState } from "..";
 import { api } from "../../../utils/api";
 import CameraScanNeo from "./cameraScanNeo";
 
@@ -13,7 +13,7 @@ type Props = {
   };
 };
 
-const CheckoutScan: NextPage<Props> = ({ changeView, changePage, ticket }) => {
+const CheckoutScan: NextPage<Props> = ({ changePage, ticket }) => {
   const ticketQuery = api.tickets.findTicket.useQuery({
     ticketId: ticket.ticket,
   });

@@ -1,7 +1,7 @@
-import { Item } from "@prisma/client";
+import type { Item } from "@prisma/client";
 import { type NextPage } from "next";
-import { Dispatch, SetStateAction } from "react";
-import { BasketState, ViewState } from ".";
+import type { Dispatch, SetStateAction } from "react";
+import type { BasketState, ViewState } from ".";
 import { api } from "../../utils/api";
 
 type Props = {

@@ -1,13 +1,12 @@
 import { type NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
-import Router from "next/router";
 import { useEffect, useState } from "react";
 import { api } from "../../../utils/api";
 
 const CategoryOverview: NextPage = () => {
   const categoriesQuery = api.categories.listCategories.useQuery();
-  const [drinkCategories, setDrinkCategories] = useState<any>();
+  const [drinkCategories, setDrinkCategories] = useState<JSX.Element[]>();
   useEffect(() => {
     setDrinkCategories(
       categoriesQuery.data?.map((category) => (
@@ -21,7 +20,7 @@ const CategoryOverview: NextPage = () => {
         </Link>
       ))
     );
-  }, [categoriesQuery.dataUpdatedAt]);
+  }, [categoriesQuery.data, categoriesQuery.dataUpdatedAt]);
 
   return (
     <>

@@ -1,16 +1,14 @@
-import { NextPage } from "next";
+import type { NextPage } from "next";
 import { BrowserMultiFormatReader } from "@zxing/library";
-import {
+import type {
   ChangeEventHandler,
   Dispatch,
   FormEventHandler,
   SetStateAction,
-  useEffect,
-  useRef,
-  useState,
 } from "react";
+import { useEffect, useRef, useState } from "react";
 import { api } from "../../utils/api";
-import { Ticket } from "@prisma/client";
+import type { Ticket } from "@prisma/client";
 
 type Props = {
   changeView: Dispatch<SetStateAction<"scan" | "info">>;
@@ -29,23 +27,26 @@ const CameraScanNeo: NextPage<Props> = ({ changeView, setTicket }) => {
 
   useEffect(() => {
     if (!videoRef.current) return;
-    reader.current.decodeFromConstraints(
-      {
-        audio: false,
-        video: {
-          facingMode: "environment",
+    reader.current
+      .decodeFromConstraints(
+        {
+          audio: false,
+          video: {
+            facingMode: "environment",
+          },
         },
-      },
-      videoRef.current,
-      (result, error) => {
-        if (result) {
-          setResult(result.getText());
-          console.log(result); //debug
+        videoRef.current,
+        (result, error) => {
+          if (result) {
+            setResult(result.getText());
+            console.log(result); //debug
+          }
+          if (error) return;
         }
-        if (error) return;
-      }
-    );
+      )
+      .catch((error) => console.log(error));
     return () => {
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       reader.current.reset();
     };
   }, [videoRef]);
@@ -56,7 +57,7 @@ const CameraScanNeo: NextPage<Props> = ({ changeView, setTicket }) => {
       setTicket(ticketExistsQuery.data);
       changeView("info");
     }
-  }, [ticketExistsQuery.data]);
+  }, [changeView, setTicket, ticketExistsQuery.data]);
 
   const handleManualTicketInput: ChangeEventHandler<HTMLInputElement> = (e) => {
     if (e.target.value.trim() != "") setTicketInputField(e.target.value);
