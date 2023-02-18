@@ -13,7 +13,7 @@ const ServiceSubtotal: NextPage<Props> = ({ basket, changeView }) => {
     itemCount += basketItem.count;
   });
   return (
-    <div className="absolute bottom-2 right-2 left-2 flex flex-col gap-2 rounded-xl bg-gradient-to-b from-green-700 to-green-800 p-2 md:left-auto md:w-96">
+    <div className="absolute bottom-0 right-0 left-0 flex flex-col gap-2 rounded-t-xl bg-gradient-to-b from-green-700 to-green-800 p-2 md:bottom-2 md:right-2 md:left-auto md:w-96 md:rounded-xl">
       <div>
         <div className="font-bold text-white">
           {itemCount} {itemCount == 1 ? "Item" : "Items"}

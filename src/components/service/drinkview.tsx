@@ -68,7 +68,7 @@ const ServiceDrinkview: NextPage<Props> = ({ viewState, basketState }) => {
             )}
             {viewState.view.type == "drink" && <>{viewState.view.parentId}</>}
           </h1>
-          <div className="grid grid-cols-1 gap-4 pb-16 sm:grid-cols-2 md:gap-8 md:pb-0">
+          <div className="grid grid-cols-2 gap-4 pb-16 sm:grid-cols-2 md:gap-8 md:pb-0">
             {drinkCategories}
           </div>
         </div>

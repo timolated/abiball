@@ -3,6 +3,7 @@ import type { NextPage } from "next";
 import { useState } from "react";
 import CameraScanNeo from "../../components/checkin/cameraScanNeo";
 import CheckInTicketPage from "../../components/checkin/checkin";
+import CheckInError from "../../components/checkin/error";
 
 const CheckInPage: NextPage = () => {
   const [view, setView] = useState<"scan" | "info">("scan");
@@ -15,7 +16,7 @@ const CheckInPage: NextPage = () => {
       {view == "info" && ticket && (
         <CheckInTicketPage changeView={setView} ticket={ticket} />
       )}
-      {view == "info" && !ticket && <>Wrong ticket</>}
+      {view == "info" && !ticket && <CheckInError changeView={setView} />}
     </div>
   );
 };

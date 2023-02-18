@@ -54,7 +54,7 @@ const CameraScanNeo: NextPage<Props> = ({ changePage, setTicket }) => {
 
   return (
     <>
-      <video className="max-w-md rounded-lg" ref={videoRef} />
+      <video className="max-w-full rounded-lg md:max-w-md" ref={videoRef} />
     </>
   );
 };
