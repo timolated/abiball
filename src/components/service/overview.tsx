@@ -2,7 +2,7 @@ import { type NextPage } from "next";
 import Head from "next/head";
 import type { Dispatch, SetStateAction } from "react";
 import { useEffect, useState } from "react";
-import type { ViewState } from ".";
+import type { ViewState } from "../../pages/service";
 import { api } from "../../utils/api";
 
 type Props = {

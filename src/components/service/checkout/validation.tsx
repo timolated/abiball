@@ -2,7 +2,7 @@ import type { Purchase } from "@prisma/client";
 import { type NextPage } from "next";
 import type { Dispatch, SetStateAction } from "react";
 import { useEffect, useState } from "react";
-import type { BasketState, ViewState } from "..";
+import type { BasketState, ViewState } from "../../../pages/service";
 import { api } from "../../../utils/api";
 
 type Props = {

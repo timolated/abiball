@@ -1,6 +1,6 @@
 import { type NextPage } from "next";
 import type { ChangeEventHandler, Dispatch, SetStateAction } from "react";
-import type { ViewState } from "..";
+import type { ViewState } from "../../../pages/service";
 import { api } from "../../../utils/api";
 import CameraScanNeo from "./cameraScanNeo";
 

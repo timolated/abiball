@@ -1,6 +1,6 @@
 import { type NextPage } from "next";
 import type { Dispatch, SetStateAction } from "react";
-import type { BasketState, ViewState } from ".";
+import type { BasketState, ViewState } from "../../pages/service";
 
 type Props = {
   changeView: Dispatch<SetStateAction<ViewState>>;

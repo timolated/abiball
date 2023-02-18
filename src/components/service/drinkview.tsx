@@ -2,7 +2,7 @@ import { type NextPage } from "next";
 import Head from "next/head";
 import type { Dispatch, SetStateAction } from "react";
 import { useEffect, useState } from "react";
-import type { BasketState, ViewState } from ".";
+import type { BasketState, ViewState } from "../../pages/service";
 import { api } from "../../utils/api";
 import DrinkItem from "./drinkitem";
 

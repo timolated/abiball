@@ -1,8 +1,8 @@
 import type { Ticket } from "@prisma/client";
 import type { NextPage } from "next";
 import { useState } from "react";
-import CameraScanNeo from "./cameraScanNeo";
-import CheckInTicketPage from "./checkin";
+import CameraScanNeo from "../../components/checkin/cameraScanNeo";
+import CheckInTicketPage from "../../components/checkin/checkin";
 
 const CheckInPage: NextPage = () => {
   const [view, setView] = useState<"scan" | "info">("scan");

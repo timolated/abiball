@@ -1,11 +1,11 @@
 import type { Item } from "@prisma/client";
 import { type NextPage } from "next";
 import { useEffect, useState } from "react";
-import ServiceCheckout from "./checkout";
-import ServiceDrinkCount from "./count";
-import ServiceDrinkview from "./drinkview";
-import ServiceOverview from "./overview";
-import ServiceSubtotal from "./subtotal";
+import ServiceCheckout from "../../components/service/checkout";
+import ServiceDrinkCount from "../../components/service/count";
+import ServiceDrinkview from "../../components/service/drinkview";
+import ServiceOverview from "../../components/service/overview";
+import ServiceSubtotal from "../../components/service/subtotal";
 
 export type ViewState = {
   type: "overview" | "category" | "drink" | "basket" | "checkout" | "count";
