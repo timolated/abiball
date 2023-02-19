@@ -1,23 +1,25 @@
+import type { Category, Item } from "@prisma/client";
 import { type NextPage } from "next";
 import Head from "next/head";
 import type { Dispatch, SetStateAction } from "react";
 import { useEffect, useState } from "react";
 import type { ViewState } from "../../pages/service";
-import { api } from "../../utils/api";
 
 type Props = {
   viewState: {
     view: ViewState;
     setView: Dispatch<SetStateAction<ViewState>>;
   };
+  data: (Category & {
+    Item: Item[];
+  })[];
 };
 
-const ServiceOverview: NextPage<Props> = ({ viewState }) => {
-  const categoriesQuery = api.categories.listCategories.useQuery();
+const ServiceOverview: NextPage<Props> = ({ viewState, data }) => {
   const [drinkCategories, setDrinkCategories] = useState<JSX.Element[]>();
   useEffect(() => {
     setDrinkCategories(
-      categoriesQuery.data?.map((item) => (
+      data.map((item) => (
         <button
           onClick={() => {
             viewState.setView({
@@ -34,7 +36,7 @@ const ServiceOverview: NextPage<Props> = ({ viewState }) => {
         </button>
       ))
     );
-  }, [categoriesQuery.data, categoriesQuery.dataUpdatedAt, viewState]);
+  }, [data, viewState]);
 
   return (
     <>

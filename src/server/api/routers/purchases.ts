@@ -25,6 +25,14 @@ export const purchasesRouter = createTRPCRouter({
       })
     )
     .mutation(({ ctx, input }) => {
+      void ctx.prisma.purchaseLog
+        .create({
+          data: {
+            ...input,
+          },
+        })
+        .catch((error: unknown) => console.error(error))
+        .then((fin: unknown) => console.log(fin));
       return ctx.prisma.purchase.create({
         data: {
           ...input,

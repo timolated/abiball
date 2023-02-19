@@ -21,24 +21,29 @@ const CheckoutValidation: NextPage<Props> = ({
   ticket,
 }) => {
   const [transactions, setTransactions] = useState<Purchase[]>([]);
-  const getTicketQunery = api.tickets.findTicket.useQuery({ ticketId: ticket });
+  const getTicketQuery = api.tickets.findTicket.useQuery({ ticketId: ticket });
   const processpurchasemutation = api.purchases.makePurchase.useMutation();
   useEffect(() => {
-    const process = () => {
+    const process = async () => {
       const purchases: Purchase[] = [];
-      // eslint-disable-next-line @typescript-eslint/no-misused-promises
-      [...basket.items.values()].forEach(async (basketItem) => {
-        const purchase = await processpurchasemutation.mutateAsync({
-          buyerId: ticket,
-          quantity: basketItem.count,
-          itemId: basketItem.item.id,
-        });
-        purchases.push(purchase);
-      });
-      setTransactions(purchases);
+      for await (const basketItem of [...basket.items.values()]) {
+        const purchase = await processpurchasemutation
+          .mutateAsync({
+            buyerId: ticket,
+            itemId: basketItem.item.id,
+            quantity: basketItem.count,
+          })
+          .catch((error) => console.error(error));
+        if (purchase) purchases.push(purchase);
+        setTransactions(purchases);
+      }
     };
-    void process();
-  }, [basket.items, processpurchasemutation, ticket]);
+    if (ticket.trim() != "") {
+      console.log(ticket);
+      void process();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <main className="flex min-h-screen flex-col items-center justify-center gap-2 bg-gradient-to-b from-blue-600 to-violet-700">
       {transactions.length == basket.items.size && (
@@ -48,7 +53,7 @@ const CheckoutValidation: NextPage<Props> = ({
       )}
       <div className="flex w-full max-w-md flex-col gap-2 rounded-xl bg-gradient-to-b from-white/10 to-white/20 p-2">
         <h1 className="text-xl font-semibold tracking-tight text-white">
-          Auftrag für {getTicketQunery.data?.holderName}
+          Auftrag für {getTicketQuery.data?.holderName}
         </h1>
         <div className="flex flex-col gap-1">
           {[...basket.items.values()].map((basketItem) => {

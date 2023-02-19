@@ -6,6 +6,7 @@ import ServiceDrinkCount from "../../components/service/count";
 import ServiceDrinkview from "../../components/service/drinkview";
 import ServiceOverview from "../../components/service/overview";
 import ServiceSubtotal from "../../components/service/subtotal";
+import { api } from "../../utils/api";
 
 export type ViewState = {
   type: "overview" | "category" | "drink" | "basket" | "checkout" | "count";
@@ -18,6 +19,8 @@ export type BasketState = {
 };
 
 const ServiceHome: NextPage = () => {
+  const categoriesRecursiveQuery =
+    api.categories.listCategoriesRecursive.useQuery();
   const [basket, setBasket] = useState<BasketState>({
     items: new Map<string, { item: Item; count: number }>(),
     total: 0,
@@ -38,16 +41,21 @@ const ServiceHome: NextPage = () => {
 
   return (
     <main className="flex h-screen items-center justify-center overflow-auto bg-gradient-to-b from-blue-600 to-violet-700">
-      {view.type == "overview" && (
-        <ServiceOverview viewState={{ view, setView }} />
-      )}
-      {(view.type == "category" || view.type == "drink") && (
-        <ServiceDrinkview
+      {view.type == "overview" && categoriesRecursiveQuery.data && (
+        <ServiceOverview
           viewState={{ view, setView }}
-          basketState={{ basket, setBasket }}
+          data={categoriesRecursiveQuery.data}
         />
       )}
-      {view.type == "count" && (
+      {(view.type == "category" || view.type == "drink") &&
+        categoriesRecursiveQuery.data && (
+          <ServiceDrinkview
+            viewState={{ view, setView }}
+            basketState={{ basket, setBasket }}
+            data={categoriesRecursiveQuery.data}
+          />
+        )}
+      {view.type == "count" && categoriesRecursiveQuery.data && (
         <ServiceDrinkCount
           viewState={{ view, setView }}
           basketState={{ basket, setBasket }}

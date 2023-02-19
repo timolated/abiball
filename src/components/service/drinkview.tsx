@@ -1,9 +1,9 @@
+import type { Category, Item } from "@prisma/client";
 import { type NextPage } from "next";
 import Head from "next/head";
 import type { Dispatch, SetStateAction } from "react";
 import { useEffect, useState } from "react";
 import type { BasketState, ViewState } from "../../pages/service";
-import { api } from "../../utils/api";
 import DrinkItem from "./drinkitem";
 
 type Props = {
@@ -15,20 +15,29 @@ type Props = {
     basket: BasketState;
     setBasket: Dispatch<SetStateAction<BasketState>>;
   };
+  data: (Category & {
+    Item: Item[];
+  })[];
 };
 
-const ServiceDrinkview: NextPage<Props> = ({ viewState, basketState }) => {
-  const drinksQuery = api.drinks.listDrinks.useQuery({});
+const ServiceDrinkview: NextPage<Props> = ({
+  viewState,
+  basketState,
+  data,
+}) => {
   const [drinkCategories, setDrinkCategories] = useState<JSX.Element[]>();
   useEffect(() => {
-    const drinksData = drinksQuery.data?.filter((item) => {
-      if (viewState.view.type == "category") {
-        return item.categoryId == viewState.view.categoryId && !item.parentId;
-      }
-      if (viewState.view.type == "drink") {
-        return item.parentId == viewState.view.parentId;
-      }
-    });
+    let drinksData: Item[] | undefined;
+    if (viewState.view.type == "category") {
+      drinksData = data
+        .find((category) => category.id == viewState.view.categoryId)
+        ?.Item.filter((item) => item.parentId == null);
+    }
+    if (viewState.view.type == "drink") {
+      drinksData = data
+        .find((category) => category.id == viewState.view.categoryId)
+        ?.Item.filter((item) => item.parentId == viewState.view.parentId);
+    }
     if (!drinksData) return;
     setDrinkCategories(
       drinksData.map((item) => (
@@ -37,10 +46,15 @@ const ServiceDrinkview: NextPage<Props> = ({ viewState, basketState }) => {
           drink={item}
           viewState={viewState}
           basketState={basketState}
+          data={
+            data
+              .find((category) => category.id == viewState.view.categoryId)
+              ?.Item.filter((drink) => drink.parentId == item.id) || []
+          }
         />
       ))
     );
-  }, [basketState, drinksQuery.data, drinksQuery.dataUpdatedAt, viewState]);
+  }, [basketState, data, viewState]);
 
   return (
     <>

@@ -11,21 +11,23 @@ datasource db {
 }
 
 model Ticket {
-  ticketId   String     @id @default(cuid())
-  holderName String
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
-  Purchase   Purchase[]
+  ticketId     String        @id @default(cuid())
+  holderName   String
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  purchases    Purchase[]    @relation("PurchaseBuyer")
+  purchasesLog PurchaseLog[] @relation("PurchaseBuyerLogging")
 }
 
 model Item {
-  id          String     @id @default(cuid())
-  displayName String
-  category    Category   @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  Purchase    Purchase[]
-  categoryId  String
-  price       Int        @default(0)
-  icon        String?
+  id           String        @id @default(cuid())
+  displayName  String
+  category     Category      @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  purchases    Purchase[]    @relation("PurchaseItem")
+  purchasesLog PurchaseLog[] @relation("PurchaseItemLogging")
+  categoryId   String
+  price        Int           @default(0)
+  icon         String?
 
   parentItem    Item?   @relation("ParentChild", fields: [parentId], references: [id], onDelete: Cascade)
   parentId      String?
@@ -39,13 +41,23 @@ model Category {
   Item        Item[]
 }
 
-model Purchase {
+model PurchaseLog {
   purchaseId String   @id @default(cuid())
-  buyer      Ticket   @relation(fields: [buyerId], references: [ticketId], onDelete: Cascade)
+  buyer      Ticket   @relation("PurchaseBuyerLogging", fields: [buyerId], references: [ticketId], onDelete: Cascade)
   buyerId    String
-  item       Item     @relation(fields: [itemId], references: [id], onDelete: NoAction)
+  item       Item     @relation("PurchaseItemLogging", fields: [itemId], references: [id], onDelete: NoAction)
   itemId     String
   quantity   Int      @default(1)
   timestamp  DateTime @default(now())
-  paid       Boolean  @default(false)
+}
+
+model Purchase {
+  purchaseId String   @id @default(cuid())
+  buyer      Ticket   @relation("PurchaseBuyer", fields: [buyerId], references: [ticketId], onDelete: Cascade)
+  buyerId    String
+  item       Item     @relation("PurchaseItem", fields: [itemId], references: [id], onDelete: NoAction)
+  itemId     String
+  quantity   Int      @default(1)
+  paid       Int      @default(0)
+  timestamp  DateTime @default(now())
 }

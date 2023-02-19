@@ -11,8 +11,16 @@ export const categoriesRouter = createTRPCRouter({
         select: { displayName: true },
       });
     }),
+
   listCategories: publicProcedure.query(({ ctx }) => {
     return ctx.prisma.category.findMany();
+  }),
+  listCategoriesRecursive: publicProcedure.query(({ ctx }) => {
+    return ctx.prisma.category.findMany({
+      include: {
+        Item: true,
+      },
+    });
   }),
   createCategory: publicProcedure
     .input(

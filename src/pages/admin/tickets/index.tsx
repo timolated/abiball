@@ -6,7 +6,7 @@ import Router from "next/router";
 import { api } from "../../../utils/api";
 
 type TicketWithQuery = Ticket & {
-  Purchase: (Purchase & {
+  purchases: (Purchase & {
     item: Item;
   })[];
 };
@@ -26,14 +26,21 @@ const Home: NextPage = () => {
     >
       <div className="col-span-2">{ticket.ticketId}</div>
       <div className="col-span-2">{ticket.holderName}</div>
-      <div className="pr-4 text-end">
+      <div className="text-end">
         {(
-          ticket.Purchase.reduce((i, j) => i + j.item.price * j.quantity, 0) /
+          ticket.purchases.reduce((i, j) => {
+            return i + j.item.price * (j.quantity - j.paid);
+          }, 0) / 100
+        ).toFixed(2)}
+        €
+      </div>
+      <div className="text-end">
+        {(
+          ticket.purchases.reduce((i, j) => i + j.item.price * j.quantity, 0) /
           100
         ).toFixed(2)}
         €
       </div>
-      <div>Unbekannt</div>
     </div>
   ));
   return (
@@ -53,12 +60,12 @@ const Home: NextPage = () => {
           <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
             Ticketkartenverwaltung
           </h1>
-          <div className="flex h-full w-full max-w-xl flex-col gap-1 overflow-auto rounded-xl bg-white bg-opacity-90 p-4">
+          <div className="flex h-full w-full max-w-md flex-col gap-1 overflow-auto rounded-xl bg-white bg-opacity-90 p-4 md:max-w-lg">
             <div className="grid grid-cols-6 px-2">
               <div className="col-span-2 font-bold">Ticket Id</div>
               <div className="col-span-2 font-bold">Name</div>
-              <div className="font-bold">Betrag</div>
-              <div className="font-bold">Status</div>
+              <div className="font-bold">Betrag (Offen)</div>
+              <div className="font-bold">Betrag (Gesamt)</div>
             </div>
 
             {ticketMap}

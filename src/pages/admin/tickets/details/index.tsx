@@ -202,20 +202,19 @@ const TicketDetailsPage: NextPage = () => {
               </button>
             </div>
           )}
-          {ticketId.trim() != "" && ticketQuery.data?.Purchase && (
+          {ticketId.trim() != "" && ticketQuery.data?.purchases && (
             <div className="flex w-full max-w-sm flex-col rounded-xl bg-white/10 p-4 text-white transition ">
               <div className="font-bold">
                 Total:{" "}
                 {(
-                  ticketQuery.data?.Purchase.reduce(
+                  ticketQuery.data?.purchases.reduce(
                     (i, j) => i + j.item.price * j.quantity,
                     0
                   ) / 100
                 ).toFixed(2)}
                 €
               </div>
-              <div>Purchases:</div>
-              {ticketQuery.data?.Purchase.map((item) => {
+              {ticketQuery.data?.purchases.map((item) => {
                 // timeStamp.format();
                 return (
                   <div

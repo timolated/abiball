@@ -85,7 +85,7 @@ const ServiceDrinkCount: NextPage<Props> = ({ viewState, basketState }) => {
               min={1}
               max={99}
               step={1}
-              value={item?.count}
+              value={item?.count || 1}
               autoComplete="off"
               className=" rounded-lg bg-white/20 p-2 text-center text-7xl font-bold text-white focus:outline-white"
             />

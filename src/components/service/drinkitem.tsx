@@ -3,8 +3,6 @@ import { type NextPage } from "next";
 import type { Dispatch, SetStateAction } from "react";
 import type { ViewState, BasketState } from "../../pages/service";
 
-import { api } from "../../utils/api";
-
 type Props = {
   drink: Item;
   viewState: {
@@ -15,18 +13,22 @@ type Props = {
     basket: BasketState;
     setBasket: Dispatch<SetStateAction<BasketState>>;
   };
+  data: Item[];
 };
 
-const DrinkItem: NextPage<Props> = ({ drink, viewState, basketState }) => {
-  const childrenQuery = api.drinks.listDrinks.useQuery({ parentId: drink.id });
-
+const DrinkItem: NextPage<Props> = ({
+  drink,
+  viewState,
+  basketState,
+  data,
+}) => {
   return (
     <>
-      {childrenQuery.data && (
+      {data && (
         <button
           onClick={() => {
             // wenn keine weiteren subdrinks
-            if (childrenQuery.data.length == 0) {
+            if (data.length == 0) {
               basketState.setBasket((state) => {
                 if (state.items.has(drink.id)) {
                   const drinkItem = {
