@@ -10,7 +10,7 @@ type Props = {
 
 const CheckInTicketPage: NextPage<Props> = ({ changeView, ticket }) => {
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex w-full flex-col gap-4 md:max-w-md">
       <Head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link

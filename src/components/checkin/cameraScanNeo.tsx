@@ -30,10 +30,12 @@ const CameraScanNeo: NextPage<Props> = ({ changeView, setTicket }) => {
 
   useEffect(() => {
     if (ticketExistsQuery.data) {
+      setResult("");
       setTicket(ticketExistsQuery.data);
       changeView("info");
     } else if (!ticketExistsQuery.isLoading && result.trim() != "") {
       setResult("");
+      setTicket(undefined);
       changeView("info");
     }
   }, [
@@ -85,7 +87,14 @@ const CameraScanNeo: NextPage<Props> = ({ changeView, setTicket }) => {
           {ticketDisplayQuery.data.holderName}
         </h1>
       )}
-      <video className="max-w-full rounded-lg md:max-w-md" ref={videoRef} />
+      {!ticketExistsQuery.isLoading && (
+        <video className="max-w-full rounded-lg md:max-w-md" ref={videoRef} />
+      )}
+      {ticketExistsQuery.isLoading && (
+        <div className="flex h-80 w-full max-w-full items-center justify-center rounded-lg bg-white/20 md:max-w-md">
+          <span className="animate-spin text-9xl">🥳</span>
+        </div>
+      )}
       <form onSubmit={handleManualSubmit}>
         <input
           type="text"
@@ -93,7 +102,7 @@ const CameraScanNeo: NextPage<Props> = ({ changeView, setTicket }) => {
           value={ticketInputFieldValue}
           onChange={handleManualTicketInput}
           placeholder="TicketId"
-          className="text-center w-full max-w-md rounded-xl bg-white/20  p-2 text-4xl font-bold text-white placeholder-white/50 focus:outline-white"
+          className="w-full max-w-md rounded-xl bg-white/20 p-2  text-center text-4xl font-bold text-white placeholder-white/50 focus:outline-white"
         />
       </form>
     </div>
