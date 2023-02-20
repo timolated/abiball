@@ -32,7 +32,7 @@ const Home: NextPage = () => {
             </Link>
             <Link
               className="flex max-w-sm flex-col items-center gap-4 rounded-xl bg-white/10 p-4 text-white transition hover:bg-white/20"
-              href="https://create.t3.gg/en/usage/first-steps"
+              href="checkout"
             >
               <div className="text-9xl">🚪</div>
               <h3 className="text-2xl font-bold">Check-Out</h3>

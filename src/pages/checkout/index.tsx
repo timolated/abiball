@@ -2,10 +2,10 @@ import type { Ticket } from "@prisma/client";
 import type { NextPage } from "next";
 import { useState } from "react";
 import CameraScanNeo from "../../components/checkin/cameraScanNeo";
-import CheckInTicketPage from "../../components/checkin/checkin";
 import CheckInError from "../../components/checkin/error";
+import CheckOutTicketPage from "../../components/checkout/checkout";
 
-const CheckInPage: NextPage = () => {
+const CheckOutPage: NextPage = () => {
   const [view, setView] = useState<"scan" | "info">("scan");
   const [ticket, setTicket] = useState<Ticket | undefined>();
   return (
@@ -14,11 +14,11 @@ const CheckInPage: NextPage = () => {
         <CameraScanNeo setTicket={setTicket} changeView={setView} />
       )}
       {view == "info" && ticket && (
-        <CheckInTicketPage changeView={setView} ticket={ticket} />
+        <CheckOutTicketPage changeView={setView} ticket={ticket} />
       )}
       {view == "info" && !ticket && <CheckInError changeView={setView} />}
     </div>
   );
 };
 
-export default CheckInPage;
+export default CheckOutPage;
