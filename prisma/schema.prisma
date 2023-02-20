@@ -59,5 +59,4 @@ model Purchase {
   itemId     String
   quantity   Int      @default(1)
   paid       Int      @default(0)
-  timestamp  DateTime @default(now())
 }

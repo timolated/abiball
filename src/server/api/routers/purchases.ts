@@ -24,16 +24,50 @@ export const purchasesRouter = createTRPCRouter({
         quantity: z.number().optional(),
       })
     )
-    .mutation(({ ctx, input }) => {
+    .mutation(async ({ ctx, input }) => {
       void ctx.prisma.purchaseLog
         .create({
           data: {
             ...input,
           },
         })
-        .catch((error: unknown) => console.error(error))
-        .then((fin: unknown) => console.log(fin));
+        .catch((error: unknown) => console.error(error));
+
+      const purchase = await ctx.prisma.purchase
+        .findFirst({
+          where: {
+            buyerId: input.buyerId,
+            itemId: input.itemId,
+          },
+        })
+        .catch((error: unknown) => console.error(error));
+
+      if (purchase) {
+        return ctx.prisma.purchase.update({
+          where: { purchaseId: purchase.purchaseId },
+          data: {
+            quantity: purchase.quantity + (input.quantity ?? 1),
+          },
+        });
+      }
+
       return ctx.prisma.purchase.create({
+        data: {
+          ...input,
+        },
+      });
+    }),
+  updatePurchase: publicProcedure
+    .input(
+      z.object({
+        purchaseId: z.string(),
+        quantity: z.number().optional(),
+        paid: z.number().optional(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      return ctx.prisma.purchase.update({
+        where: { purchaseId: input.purchaseId },
         data: {
           ...input,
         },
