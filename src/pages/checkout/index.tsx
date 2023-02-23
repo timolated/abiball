@@ -9,7 +9,7 @@ const CheckOutPage: NextPage = () => {
   const [view, setView] = useState<"scan" | "info">("scan");
   const [ticket, setTicket] = useState<Ticket | undefined>();
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-blue-600 to-violet-700 p-2">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-blue-600 to-violet-700 p-4">
       {view == "scan" && (
         <CameraScanNeo setTicket={setTicket} changeView={setView} />
       )}

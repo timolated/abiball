@@ -32,7 +32,6 @@ const ServiceCheckout: NextPage<Props> = ({
           changePage={setChekcoutpage}
         />
       )}
-      {/* changePage={setChekcoutpage} */}
       {chekcoutpage == "scan" && (
         <CheckoutScan
           changeView={changeView}

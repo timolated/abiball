@@ -1,6 +1,5 @@
 import type { Item } from "@prisma/client";
 import { type NextPage } from "next";
-import Head from "next/head";
 import type { ChangeEventHandler, Dispatch, SetStateAction } from "react";
 import { useEffect, useState } from "react";
 import type { BasketState, ViewState } from "../../pages/service";
@@ -43,76 +42,68 @@ const ServiceDrinkCount: NextPage<Props> = ({ viewState, basketState }) => {
   };
   return (
     <>
-      <Head>
-        <title>MGAbiball</title>
-        <meta name="description" content="" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-blue-600 to-violet-700">
-        <div
-          onClick={() =>
-            viewState.setView({ ...viewState.view, type: "overview" })
-          }
-          className="absolute top-2 left-2 cursor-pointer"
-        >
-          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-white/90 p-2 text-3xl">
-            🔙
-          </div>
+      <div
+        onClick={() =>
+          viewState.setView({ ...viewState.view, type: "overview" })
+        }
+        className="absolute top-2 left-2 cursor-pointer"
+      >
+        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-white/90 p-2 text-3xl">
+          🔙
         </div>
-        <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
-          <div>
-            <h1 className="text-center text-5xl font-extrabold tracking-tight text-white">
-              Anzahl
-            </h1>
-            <h2 className="text-center text-2xl font-bold tracking-tight text-white">
-              {item?.item.displayName}
-            </h2>
-          </div>
-          <div className="grid grid-cols-3 gap-4">
-            <button
-              disabled={(item?.count ?? -1) <= 1}
-              onClick={() => {
-                if ((item?.count ?? -1) > 1)
-                  changeValue((item?.count ?? -1) - 1);
-              }}
-              className="rounded-lg bg-white/20 p-2 text-center text-7xl font-bold text-white focus:outline-white disabled:bg-black/20"
-            >
-              ➖
-            </button>
-            <input
-              type="number"
-              onChange={handleCountChange}
-              min={1}
-              max={99}
-              step={1}
-              value={item?.count || 1}
-              autoComplete="off"
-              className=" rounded-lg bg-white/20 p-2 text-center text-7xl font-bold text-white focus:outline-white"
-            />
-            <button
-              disabled={(item?.count ?? -1) >= 99}
-              onClick={() => {
-                if ((item?.count ?? -1) < 99)
-                  changeValue((item?.count ?? -1) + 1);
-              }}
-              className="rounded-lg bg-white/20 p-2 text-center text-7xl font-bold text-white focus:outline-white disabled:bg-black/20"
-            >
-              ➕
-            </button>
-          </div>
+      </div>
+      <div className="container flex flex-col items-center justify-center gap-4">
+        <div>
+          <h1 className="text-center text-3xl font-extrabold tracking-tight text-white md:text-5xl">
+            Anzahl
+          </h1>
+          <h2 className="text-center text-2xl font-bold tracking-tight text-white">
+            {item?.item.displayName}
+          </h2>
+        </div>
+        <div className="grid grid-cols-3 gap-4">
           <button
-            autoFocus
+            disabled={(item?.count ?? -1) <= 1}
             onClick={() => {
-              viewState.setView((state) => {
-                return { ...state, type: "overview" };
-              });
+              if ((item?.count ?? -1) > 1) changeValue((item?.count ?? -1) - 1);
             }}
-            className="flex grow cursor-pointer items-center justify-center rounded-lg bg-white p-2 px-4 align-middle"
+            className="rounded-lg bg-white/20 p-2 text-center text-7xl font-bold text-white focus:outline-white disabled:bg-black/20"
           >
-            Speichern
+            ➖
+          </button>
+          <input
+            type="number"
+            onChange={handleCountChange}
+            min={1}
+            max={99}
+            step={1}
+            value={item?.count || 1}
+            autoComplete="off"
+            className=" rounded-lg bg-white/20 p-2 text-center text-7xl font-bold text-white focus:outline-white"
+          />
+          <button
+            disabled={(item?.count ?? -1) >= 99}
+            onClick={() => {
+              if ((item?.count ?? -1) < 99)
+                changeValue((item?.count ?? -1) + 1);
+            }}
+            className="rounded-lg bg-white/20 p-2 text-center text-7xl font-bold text-white focus:outline-white disabled:bg-black/20"
+          >
+            ➕
           </button>
         </div>
-      </main>
+        <button
+          autoFocus
+          onClick={() => {
+            viewState.setView((state) => {
+              return { ...state, type: "overview" };
+            });
+          }}
+          className="flex grow cursor-pointer items-center justify-center rounded-lg bg-white p-2 px-4 align-middle"
+        >
+          Speichern
+        </button>
+      </div>
     </>
   );
 };

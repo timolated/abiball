@@ -23,8 +23,8 @@ const CheckoutScan: NextPage<Props> = ({ changePage, ticket }) => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center gap-2 px-2">
-      <h1 className="text-5xl font-extrabold tracking-tight text-white md:text-3xl">
+    <div className="flex flex-col items-center justify-center gap-4">
+      <h1 className="text-3xl font-extrabold tracking-tight text-white md:text-5xl">
         Ticket scannen
       </h1>
       <h2 className="text-3xl font-bold text-white">

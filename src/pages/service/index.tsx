@@ -40,7 +40,7 @@ const ServiceHome: NextPage = () => {
   }, [basket]);
 
   return (
-    <main className="flex h-screen items-center justify-center overflow-auto bg-gradient-to-b from-blue-600 to-violet-700">
+    <main className="flex h-screen items-center justify-center overflow-auto bg-gradient-to-b from-blue-600 to-violet-700 p-4">
       {view.type == "overview" && categoriesRecursiveQuery.data && (
         <ServiceOverview
           viewState={{ view, setView }}

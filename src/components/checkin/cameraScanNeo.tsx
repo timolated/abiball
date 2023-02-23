@@ -83,7 +83,7 @@ const CameraScanNeo: NextPage<Props> = ({ changeView, setTicket }) => {
     if (ticketInputFieldValue.trim() != "") setResult(ticketInputFieldValue);
   };
   return (
-    <div className="flex flex-col gap-4 p-2">
+    <div className="flex flex-col gap-4">
       {ticketDisplayQuery.data && (
         <h1 className="text-2xl font-semibold text-white">
           {ticketDisplayQuery.data.holderName}

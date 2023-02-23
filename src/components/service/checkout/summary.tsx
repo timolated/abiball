@@ -55,8 +55,8 @@ const CheckoutSummary: NextPage<Props> = ({
     });
   };
   return (
-    <div className="flex grow flex-col items-center justify-center gap-2 px-2">
-      <h1 className="text-3xl font-extrabold tracking-tight text-white md:text-6xl">
+    <div className="flex grow flex-col items-center justify-center gap-4">
+      <h1 className="text-3xl font-extrabold tracking-tight text-white md:text-5xl">
         Zusammenfassung
       </h1>
       <div className="flex w-full max-w-md flex-col gap-2 rounded-xl bg-gradient-to-b from-white/10 to-white/20 p-2">

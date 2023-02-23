@@ -131,8 +131,8 @@ const TicketDetailsPage: NextPage = () => {
             🔙
           </div>
         </div>
-        <div className="flex max-h-screen w-full max-w-5xl flex-col items-center justify-center gap-12 px-4 py-16 ">
-          <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
+        <div className="flex max-h-screen w-full max-w-5xl flex-col items-center justify-center gap-4">
+          <h1 className="text-3xl font-extrabold tracking-tight text-white md:text-5xl">
             Ticket: {ticketId}
           </h1>
           <div className="contents w-full flex-row items-start gap-2 md:flex">
