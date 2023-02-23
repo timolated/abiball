@@ -6,7 +6,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "sqlserver"
   url      = env("DATABASE_URL")
 }
 
@@ -29,7 +29,7 @@ model Item {
   price        Int           @default(0)
   icon         String?
 
-  parentItem    Item?   @relation("ParentChild", fields: [parentId], references: [id], onDelete: Cascade)
+  parentItem    Item?   @relation("ParentChild", fields: [parentId], references: [id], onUpdate: NoAction, onDelete: NoAction)
   parentId      String?
   childlrenItem Item[]  @relation("ParentChild")
 }
@@ -45,7 +45,7 @@ model PurchaseLog {
   purchaseId String   @id @default(cuid())
   buyer      Ticket   @relation("PurchaseBuyerLogging", fields: [buyerId], references: [ticketId], onDelete: Cascade)
   buyerId    String
-  item       Item     @relation("PurchaseItemLogging", fields: [itemId], references: [id], onDelete: NoAction)
+  item       Item     @relation("PurchaseItemLogging", fields: [itemId], references: [id], onUpdate: NoAction, onDelete: NoAction)
   itemId     String
   quantity   Int      @default(1)
   timestamp  DateTime @default(now())
@@ -55,7 +55,7 @@ model Purchase {
   purchaseId String   @id @default(cuid())
   buyer      Ticket   @relation("PurchaseBuyer", fields: [buyerId], references: [ticketId], onDelete: Cascade)
   buyerId    String
-  item       Item     @relation("PurchaseItem", fields: [itemId], references: [id], onDelete: NoAction)
+  item       Item     @relation("PurchaseItem", fields: [itemId], references: [id], onUpdate: NoAction, onDelete: NoAction)
   itemId     String
   quantity   Int      @default(1)
   paid       Int      @default(0)
