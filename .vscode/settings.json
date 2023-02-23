@@ -1,0 +1,5 @@
+{
+  "appService.zipIgnorePattern": ["node_modules{,/**}", ".vscode{,/**}"],
+  "appService.defaultWebAppToDeploy": "/subscriptions/81ddedbe-3d82-4a9c-bf51-09a1c3202c3c/resourceGroups/abiball/providers/Microsoft.Web/sites/abiballNextApp",
+  "appService.deploySubpath": "."
+}
