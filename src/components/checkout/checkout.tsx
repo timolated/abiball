@@ -46,7 +46,7 @@ const CheckOutTicketPage: NextPage<Props> = ({ ticket }) => {
   }, [ticketQuery.data]);
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex w-full max-w-3xl flex-col gap-4">
       <Head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link

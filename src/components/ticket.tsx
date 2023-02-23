@@ -7,7 +7,7 @@ type Props = {
 
 const TicketCard: NextPage<Props> = ({ ticket }) => {
   return (
-    <div className="flex w-full max-w-full flex-col rounded-xl bg-gray-900 text-white md:max-w-md">
+    <div className="flex w-full max-w-full flex-col rounded-xl bg-gray-900 text-white">
       <div className="bg-blur-lg flex grow flex-col rounded-l-xl p-2">
         <span className="my-4 text-2xl font-semibold">{ticket.holderName}</span>
         <span className="text-lg font-bold text-gray-300">

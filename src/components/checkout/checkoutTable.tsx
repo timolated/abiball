@@ -93,7 +93,7 @@ const CheckoutTable: NextPage<Props> = ({ purchases }) => {
               Als bezahlt kennzeichnen
             </button>
           </div>
-          <div className="grid grid-cols-[auto_64px_64px] rounded-b-lg bg-white p-2">
+          <div className="grid grid-cols-[4fr_1fr_1fr] rounded-b-lg bg-white p-2">
             <>
               <div className="contents font-bold">
                 <span>Zu bezahlende Getränke</span>
@@ -146,7 +146,7 @@ const CheckoutTable: NextPage<Props> = ({ purchases }) => {
             </>
           )}
           <div
-            className={`grid grid-cols-[auto_64px_64px] ${
+            className={`grid grid-cols-[4fr_1fr_1fr] ${
               [...trans.values()].filter((val) => val.amount > 0).length > 0
                 ? "rounded-lg"
                 : "rounded-b-lg"
@@ -175,7 +175,7 @@ const CheckoutTable: NextPage<Props> = ({ purchases }) => {
         </div>
       )}
       {paid.size > 0 && (
-        <div className="grid grid-cols-[auto_64px_64px] gap-2 rounded-lg bg-gray-400 p-2">
+        <div className="grid grid-cols-[4fr_1fr_1fr] gap-2 rounded-lg bg-gray-400 p-2">
           <>
             <div className="contents font-bold">
               <span>Bezahlte Getränke</span>
