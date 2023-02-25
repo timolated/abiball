@@ -43,6 +43,11 @@ const Home: NextPage = () => {
             </div>
             {tickets.data && <TicketMap tickets={tickets.data} />}
             {!tickets.data && tickets.isLoading && <>Lade tickets...</>}
+            {tickets.error && (
+              <div className="rounded bg-red-600 p-2 font-bold">
+                Fehler beim Laden der Tickets
+              </div>
+            )}
           </div>
           <Link
             href="tickets/create"

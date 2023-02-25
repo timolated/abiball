@@ -11,6 +11,7 @@ const Home: NextPage = () => {
     displayName: string;
     icon: string;
   }>({ displayName: "", icon: "" });
+  const [error, setError] = useState(false);
 
   const handleDisplayNameChange: ChangeEventHandler<HTMLInputElement> = (
     event
@@ -33,12 +34,16 @@ const Home: NextPage = () => {
       })
       .then((res) => {
         if (res) {
+          setError(false);
           void Router.push("/admin/drinks");
         } else {
+          setError(true);
           console.error("error trying to create category");
         }
       })
-      .catch((error) => console.error(error));
+      .catch((error) => {
+        console.error(error);
+      });
   };
   return (
     <>
@@ -76,11 +81,26 @@ const Home: NextPage = () => {
                   className="min-w-0 rounded-lg bg-white bg-opacity-70 p-2 font-semibold text-black placeholder-gray-700"
                 />
               </div>
-              <input
-                type="submit"
-                value="Speichern"
-                className="rounded-lg bg-black bg-opacity-70  p-2 font-semibold text-white placeholder-gray-700"
-              />
+              {!createCategoryMutation.isLoading && (
+                <input
+                  type="submit"
+                  value="Speichern"
+                  className="rounded-lg bg-black bg-opacity-70  p-2 font-semibold text-white placeholder-gray-700"
+                />
+              )}
+              {createCategoryMutation.isLoading && (
+                <input
+                  type="submit"
+                  value="..."
+                  disabled
+                  className="animate-pulse rounded-lg bg-black bg-opacity-70  p-2 font-semibold text-white placeholder-gray-700"
+                />
+              )}
+              {error && (
+                <span className="rounded-lg bg-red-600 p-2 font-bold text-black">
+                  Fehler beim erstellen der Kategorie
+                </span>
+              )}
             </form>
           </div>
         </div>

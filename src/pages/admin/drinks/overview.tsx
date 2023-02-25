@@ -8,18 +8,21 @@ const CategoryOverview: NextPage = () => {
   const categoriesQuery = api.categories.listCategories.useQuery();
   const [drinkCategories, setDrinkCategories] = useState<JSX.Element[]>();
   useEffect(() => {
-    setDrinkCategories(
-      categoriesQuery.data?.map((category) => (
-        <Link
-          href={`/admin/drinks?category=${category.id}`}
-          key={category.id}
-          className="flex max-w-sm flex-col items-center gap-4 rounded-xl bg-white/10 p-4 text-white transition hover:bg-white/20"
-        >
-          <span className="text-9xl">{category.icon ?? <>🍷</>}</span>
-          <span className="text-2xl font-semibold">{category.displayName}</span>
-        </Link>
-      ))
-    );
+    if (categoriesQuery.data)
+      setDrinkCategories(
+        categoriesQuery.data.map((category) => (
+          <Link
+            href={`/admin/drinks?category=${category.id}`}
+            key={category.id}
+            className="flex max-w-sm flex-col items-center gap-4 rounded-xl bg-white/10 p-4 text-white transition hover:bg-white/20"
+          >
+            <span className="text-9xl">{category.icon ?? <>🍷</>}</span>
+            <span className="text-2xl font-semibold">
+              {category.displayName}
+            </span>
+          </Link>
+        ))
+      );
   }, [categoriesQuery.data, categoriesQuery.dataUpdatedAt]);
 
   return (
@@ -41,6 +44,20 @@ const CategoryOverview: NextPage = () => {
           </h1>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8">
             {drinkCategories}
+            {!categoriesQuery.data && categoriesQuery.isLoading && (
+              <div className="flex max-w-sm cursor-pointer flex-col items-center gap-4 rounded-xl bg-white/10 p-4 text-white transition hover:bg-white/20">
+                <span className="animate-spin text-9xl">🤔</span>
+                <span className="text-2xl font-semibold">Lade...</span>
+              </div>
+            )}
+            {categoriesQuery.error && (
+              <div className="flex max-w-sm cursor-not-allowed flex-col items-center gap-4 rounded-xl bg-red-600 p-4 text-white transition hover:bg-red-900">
+                <span className="text-9xl">🚫</span>
+                <span className="text-2xl font-semibold">
+                  Fehler beim Laden
+                </span>
+              </div>
+            )}
             <Link
               href="/admin/drinks/createCategory"
               className="flex max-w-sm flex-col items-center gap-4 rounded-xl bg-white/10 p-4 text-white transition hover:bg-white/20"

@@ -10,6 +10,7 @@ const Home: NextPage = () => {
     ticketId?: string;
     holderName?: string;
   }>({});
+  const [error, setError] = useState(false);
 
   const handleTicketIdChange: ChangeEventHandler<HTMLInputElement> = (
     event
@@ -34,8 +35,10 @@ const Home: NextPage = () => {
       })
       .then((res) => {
         if (res) {
+          setError(false);
           Router.back();
         } else {
+          setError(true);
           console.log("error trying to create ticket");
         }
       })
@@ -86,11 +89,26 @@ const Home: NextPage = () => {
                 onChange={handleHolderNameChange}
                 className="rounded-lg bg-white bg-opacity-70 p-2 font-semibold text-black placeholder-gray-700"
               />
-              <input
-                type="submit"
-                value="Erstellen"
-                className="rounded-lg bg-black bg-opacity-70  p-2 font-semibold text-white placeholder-gray-700"
-              />
+              {!submitMutation.isLoading && (
+                <input
+                  type="submit"
+                  value="Erstellen"
+                  className="rounded-lg bg-black bg-opacity-70  p-2 font-semibold text-white placeholder-gray-700"
+                />
+              )}
+              {submitMutation.isLoading && (
+                <input
+                  type="submit"
+                  value="..."
+                  disabled
+                  className="animate-pulse rounded-lg bg-black bg-opacity-70  p-2 font-semibold text-white placeholder-gray-700"
+                />
+              )}
+              {error && (
+                <span className="rounded-lg bg-red-600 p-2 font-bold text-black">
+                  Fehler beim erstellen des Tickets
+                </span>
+              )}
             </form>
           </div>
         </div>

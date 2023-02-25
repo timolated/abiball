@@ -41,6 +41,18 @@ const ServiceHome: NextPage = () => {
 
   return (
     <main className="flex h-screen items-center justify-center overflow-auto bg-gradient-to-b from-blue-600 to-violet-700 p-4">
+      {!categoriesRecursiveQuery.data && categoriesRecursiveQuery.isLoading && (
+        <div className="flex max-w-sm cursor-pointer flex-col items-center gap-4 rounded-xl bg-white/10 p-4 text-white transition hover:bg-white/20">
+          <span className="animate-spin text-9xl">🤔</span>
+          <span className="text-2xl font-semibold">Lade...</span>
+        </div>
+      )}
+      {categoriesRecursiveQuery.error && (
+        <div className="flex max-w-sm cursor-not-allowed flex-col items-center gap-4 rounded-xl bg-red-600 p-4 text-white transition hover:bg-red-900">
+          <span className="text-9xl">🚫</span>
+          <span className="text-2xl font-semibold">Fehler beim Laden</span>
+        </div>
+      )}
       {view.type == "overview" && categoriesRecursiveQuery.data && (
         <ServiceOverview
           viewState={{ view, setView }}
